@@ -14,6 +14,7 @@
 		193048742682143700A3AF0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 193048722682143700A3AF0B /* LaunchScreen.storyboard */; };
 		1930487F2682143800A3AF0B /* VKClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930487E2682143800A3AF0B /* VKClientTests.swift */; };
 		1930488A2682143800A3AF0B /* VKClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193048892682143800A3AF0B /* VKClientUITests.swift */; };
+		19C99000268274C300390736 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C98FFF268274C300390736 /* Session.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,6 +48,7 @@
 		193048852682143800A3AF0B /* VKClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		193048892682143800A3AF0B /* VKClientUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKClientUITests.swift; sourceTree = "<group>"; };
 		1930488B2682143800A3AF0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		19C98FFF268274C300390736 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +101,9 @@
 			children = (
 				193048642682143500A3AF0B /* AppDelegate.swift */,
 				193048682682143500A3AF0B /* ViewController.swift */,
-				193048702682143700A3AF0B /* Assets.xcassets */,
-				193048722682143700A3AF0B /* LaunchScreen.storyboard */,
+				19C98FFF268274C300390736 /* Session.swift */,
 				193048752682143700A3AF0B /* Info.plist */,
-				1930486D2682143500A3AF0B /* VKClient.xcdatamodeld */,
+				19C98FFE2682747E00390736 /* Resource */,
 			);
 			path = VKClient;
 			sourceTree = "<group>";
@@ -123,6 +124,16 @@
 				1930488B2682143800A3AF0B /* Info.plist */,
 			);
 			path = VKClientUITests;
+			sourceTree = "<group>";
+		};
+		19C98FFE2682747E00390736 /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				193048702682143700A3AF0B /* Assets.xcassets */,
+				1930486D2682143500A3AF0B /* VKClient.xcdatamodeld */,
+				193048722682143700A3AF0B /* LaunchScreen.storyboard */,
+			);
+			path = Resource;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -255,6 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				193048692682143500A3AF0B /* ViewController.swift in Sources */,
+				19C99000268274C300390736 /* Session.swift in Sources */,
 				1930486F2682143500A3AF0B /* VKClient.xcdatamodeld in Sources */,
 				193048652682143500A3AF0B /* AppDelegate.swift in Sources */,
 			);
