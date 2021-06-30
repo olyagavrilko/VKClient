@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  FriendsViewController.swift
 //  VKClient
 //
 //  Created by Olya Ganeva on 22.06.2021.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class FriendsViewController: UIViewController {
 
     private let tableView = UITableView()
 
