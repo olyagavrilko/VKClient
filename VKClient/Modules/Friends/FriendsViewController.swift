@@ -20,6 +20,7 @@ class FriendsViewController: UIViewController {
         }
         apiService.getPhotos()
         apiService.getGroups()
+        apiService.searchGroups()
     }
 
     private func setupViews() {

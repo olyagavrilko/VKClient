@@ -92,5 +92,27 @@ final class APIService {
         }
     }
 
-    
+    func searchGroups() {
+
+        let method = "/groups.search"
+
+        let parameters: Parameters = [
+            "q": "Музыка",
+            "type": "group",
+            "count": 2,
+            "access_token": Session.shared.token,
+            "v": "5.124"
+        ]
+
+        let url = baseURL + method
+
+        AF.request(url, method: .get, parameters: parameters).responseData { response in
+
+            guard let data = response.data else {
+                return
+            }
+
+            print(data.prettyJSON as Any)
+        }
+    }
 }
