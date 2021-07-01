@@ -10,10 +10,14 @@ import UIKit
 class FriendsViewController: UIViewController {
 
     private let tableView = UITableView()
+    let apiService = APIService()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        apiService.getFriends { users in
+            print("getFriends")
+        }
     }
 
     private func setupViews() {

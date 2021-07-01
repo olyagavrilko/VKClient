@@ -6,6 +6,7 @@ target 'VKClient' do
   use_frameworks!
 
   # Pods for VKClient
+  pod 'Alamofire'
 
   target 'VKClientTests' do
     inherit! :search_paths

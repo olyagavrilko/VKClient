@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        let vc = FriendsViewController()
+        let vc = Authorization()
         let navigationController = UINavigationController(rootViewController: vc)
         window = UIWindow()
         window?.rootViewController = navigationController
