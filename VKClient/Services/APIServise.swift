@@ -38,10 +38,34 @@ final class APIService {
 
             guard let data = response.data else {
                 return
-
             }
+
             print(data.prettyJSON as Any)
         }
         completion([])
+    }
+
+    func getPhotos() {
+
+        let method = "/photos.get"
+
+        let parameters: Parameters = [
+            "owner_id": "199549688",
+            "album_id": "profile",
+            "rev": 1,
+            "access_token": Session.shared.token,
+            "v": "5.77"
+        ]
+
+        let url = baseURL + method
+
+        AF.request(url, method: .get, parameters: parameters).responseData { response in
+
+            guard let data = response.data else {
+                return
+            }
+
+            print(data.prettyJSON as Any)
+        }
     }
 }
