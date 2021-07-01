@@ -68,4 +68,29 @@ final class APIService {
             print(data.prettyJSON as Any)
         }
     }
+
+    func getGroups() {
+
+        let method = "/groups.get"
+
+        let parameters: Parameters = [
+            "user_id": "199549688",
+            "extended": 1,
+            "access_token": Session.shared.token,
+            "v": "5.124"
+        ]
+
+        let url = baseURL + method
+
+        AF.request(url, method: .get, parameters: parameters).responseData { response in
+
+            guard let data = response.data else {
+                return
+            }
+
+            print(data.prettyJSON as Any)
+        }
+    }
+
+    
 }
