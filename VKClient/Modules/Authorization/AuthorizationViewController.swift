@@ -1,5 +1,5 @@
 //
-//  Authorization.swift
+//  AuthorizationViewController.swift
 //  VKClient
 //
 //  Created by Olya Ganeva on 23.06.2021.
@@ -8,7 +8,7 @@
 import UIKit
 import WebKit
 
-class Authorization: UIViewController {
+final class AuthorizationViewController: UIViewController {
 
     private let webView = WKWebView()
 
@@ -33,7 +33,6 @@ class Authorization: UIViewController {
 
     private func authorizeToVK() {
         var urlComponents = URLComponents()
-
         urlComponents.scheme = "https"
         urlComponents.host = "oauth.vk.com"
         urlComponents.path = "/authorize"
@@ -47,16 +46,26 @@ class Authorization: UIViewController {
             URLQueryItem(name: "v", value: "5.68")
         ]
 
-        let request = URLRequest(url: urlComponents.url!)
+        guard let url = urlComponents.url else {
+            return
+        }
 
+        let request = URLRequest(url: url)
         webView.load(request)
+    }
+
+    private func showMainTabBar() {
+        navigationController?.pushViewController(FriendsViewController(), animated: true)
     }
 }
 
-extension Authorization: WKNavigationDelegate {
+extension AuthorizationViewController: WKNavigationDelegate {
 
-    func webView(_ webView: WKWebView, decidePolicyFor navigationResponse: WKNavigationResponse, decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void) {
-
+    func webView(
+        _ webView: WKWebView,
+        decidePolicyFor navigationResponse: WKNavigationResponse,
+        decisionHandler: @escaping (WKNavigationResponsePolicy) -> Void
+    ) {
         guard let url = navigationResponse.response.url,
               url.path == "/blank.html",
               let fragment = url.fragment else {
@@ -73,7 +82,7 @@ extension Authorization: WKNavigationDelegate {
                 let value = param[1]
                 dict[key] = value
                 return dict
-        }
+            }
 
         if let token = params["access_token"], let userId = params["user_id"] {
             print("TOKEN = ", token as Any)
@@ -84,9 +93,5 @@ extension Authorization: WKNavigationDelegate {
         }
 
         decisionHandler(.cancel)
-    }
-
-    func showMainTabBar() {
-        navigationController?.pushViewController(FriendsViewController(), animated: true)
     }
 }

@@ -5,8 +5,8 @@
 //  Created by Olya Ganeva on 30.06.2021.
 //
 
-import Foundation
 import Alamofire
+import Foundation
 
 struct User {
 
@@ -14,14 +14,14 @@ struct User {
 
 final class APIService {
 
-    let baseURL = "https://api.vk.com/method"
-    let token = Session.shared.token
-    let clientID = Session.shared.userId
-    let version = "5.21"
+    private let baseURL = "https://api.vk.com/method"
+    private let token = Session.shared.token
+    private let clientID = Session.shared.userId
+    private let version = "5.21"
 
     func getFriends(completion: ([User]) -> ()) {
 
-        let method = "/friends.get"
+        let url = baseURL + "/friends.get"
 
         let parameters: Parameters = [
             "user_id": clientID,
@@ -31,8 +31,6 @@ final class APIService {
             "access_token": Session.shared.token,
             "v": version
         ]
-
-        let url = baseURL + method
 
         AF.request(url, method: .get, parameters: parameters).responseData { response in
 
@@ -47,7 +45,7 @@ final class APIService {
 
     func getPhotos() {
 
-        let method = "/photos.get"
+        let url = baseURL + "/photos.get"
 
         let parameters: Parameters = [
             "owner_id": "199549688",
@@ -56,8 +54,6 @@ final class APIService {
             "access_token": Session.shared.token,
             "v": "5.77"
         ]
-
-        let url = baseURL + method
 
         AF.request(url, method: .get, parameters: parameters).responseData { response in
 
@@ -71,7 +67,7 @@ final class APIService {
 
     func getGroups() {
 
-        let method = "/groups.get"
+        let url = baseURL + "/groups.get"
 
         let parameters: Parameters = [
             "user_id": "199549688",
@@ -79,8 +75,6 @@ final class APIService {
             "access_token": Session.shared.token,
             "v": "5.124"
         ]
-
-        let url = baseURL + method
 
         AF.request(url, method: .get, parameters: parameters).responseData { response in
 
@@ -94,7 +88,7 @@ final class APIService {
 
     func searchGroups() {
 
-        let method = "/groups.search"
+        let url = baseURL + "/groups.search"
 
         let parameters: Parameters = [
             "q": "Музыка",
@@ -103,8 +97,6 @@ final class APIService {
             "access_token": Session.shared.token,
             "v": "5.124"
         ]
-
-        let url = baseURL + method
 
         AF.request(url, method: .get, parameters: parameters).responseData { response in
 

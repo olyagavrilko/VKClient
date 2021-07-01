@@ -7,14 +7,15 @@
 
 import UIKit
 
-class FriendsViewController: UIViewController {
+final class FriendsViewController: UIViewController {
 
     private let tableView = UITableView()
-    let apiService = APIService()
+    private let apiService = APIService()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+
         apiService.getFriends { users in
             print("getFriends")
         }

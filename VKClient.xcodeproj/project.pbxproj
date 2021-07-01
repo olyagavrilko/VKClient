@@ -17,7 +17,7 @@
 		193048742682143700A3AF0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 193048722682143700A3AF0B /* LaunchScreen.storyboard */; };
 		1930487F2682143800A3AF0B /* VKClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930487E2682143800A3AF0B /* VKClientTests.swift */; };
 		1930488A2682143800A3AF0B /* VKClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193048892682143800A3AF0B /* VKClientUITests.swift */; };
-		199024A826837A98004F5527 /* Authorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199024A726837A98004F5527 /* Authorization.swift */; };
+		199024A826837A98004F5527 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199024A726837A98004F5527 /* AuthorizationViewController.swift */; };
 		19C99000268274C300390736 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C98FFF268274C300390736 /* Session.swift */; };
 		1AB32AD497C89DB7BEE0B1F3 /* Pods_VKClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7571D9D0C3E3F700D237D82 /* Pods_VKClient.framework */; };
 		3E67BC1CEFFCDBD15D144B58 /* Pods_VKClient_VKClientUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7EABA4473A14EAD914DD51F /* Pods_VKClient_VKClientUITests.framework */; };
@@ -56,7 +56,7 @@
 		193048852682143800A3AF0B /* VKClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		193048892682143800A3AF0B /* VKClientUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKClientUITests.swift; sourceTree = "<group>"; };
 		1930488B2682143800A3AF0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		199024A726837A98004F5527 /* Authorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Authorization.swift; sourceTree = "<group>"; };
+		199024A726837A98004F5527 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		19C98FFF268274C300390736 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		1ACC24D82AEC2136C965F459 /* Pods-VKClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKClientTests.debug.xcconfig"; path = "Target Support Files/Pods-VKClientTests/Pods-VKClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3CAD2E06703AB4F1C103388A /* Pods-VKClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKClientTests.release.xcconfig"; path = "Target Support Files/Pods-VKClientTests/Pods-VKClientTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -194,7 +194,7 @@
 		1990249B2683707A004F5527 /* Authorization */ = {
 			isa = PBXGroup;
 			children = (
-				199024A726837A98004F5527 /* Authorization.swift */,
+				199024A726837A98004F5527 /* AuthorizationViewController.swift */,
 			);
 			path = Authorization;
 			sourceTree = "<group>";
@@ -475,7 +475,7 @@
 				191B4128268CC4030066047B /* APIServise.swift in Sources */,
 				1930486F2682143500A3AF0B /* VKClient.xcdatamodeld in Sources */,
 				193048652682143500A3AF0B /* AppDelegate.swift in Sources */,
-				199024A826837A98004F5527 /* Authorization.swift in Sources */,
+				199024A826837A98004F5527 /* AuthorizationViewController.swift in Sources */,
 				191B4138268E05FE0066047B /* Data + PrettyJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
