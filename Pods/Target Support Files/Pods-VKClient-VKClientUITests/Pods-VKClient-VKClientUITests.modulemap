@@ -1,0 +1,6 @@
+framework module Pods_VKClient_VKClientUITests {
+  umbrella header "Pods-VKClient-VKClientUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
