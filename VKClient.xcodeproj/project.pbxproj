@@ -24,6 +24,7 @@
 		19CA755026971B4200F15FB7 /* GalleryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CA754F26971B4200F15FB7 /* GalleryCell.swift */; };
 		19CA75592697922400F15FB7 /* Friends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CA75582697922400F15FB7 /* Friends.swift */; };
 		19CA75612697A6CB00F15FB7 /* UIImageView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CA75602697A6CB00F15FB7 /* UIImageView+Extension.swift */; };
+		19CA7566269859A100F15FB7 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CA7565269859A100F15FB7 /* TabBarViewController.swift */; };
 		1AB32AD497C89DB7BEE0B1F3 /* Pods_VKClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7571D9D0C3E3F700D237D82 /* Pods_VKClient.framework */; };
 		3E67BC1CEFFCDBD15D144B58 /* Pods_VKClient_VKClientUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7EABA4473A14EAD914DD51F /* Pods_VKClient_VKClientUITests.framework */; };
 /* End PBXBuildFile section */
@@ -68,6 +69,7 @@
 		19CA754F26971B4200F15FB7 /* GalleryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCell.swift; sourceTree = "<group>"; };
 		19CA75582697922400F15FB7 /* Friends.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Friends.swift; sourceTree = "<group>"; };
 		19CA75602697A6CB00F15FB7 /* UIImageView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Extension.swift"; sourceTree = "<group>"; };
+		19CA7565269859A100F15FB7 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		1ACC24D82AEC2136C965F459 /* Pods-VKClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKClientTests.debug.xcconfig"; path = "Target Support Files/Pods-VKClientTests/Pods-VKClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3CAD2E06703AB4F1C103388A /* Pods-VKClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKClientTests.release.xcconfig"; path = "Target Support Files/Pods-VKClientTests/Pods-VKClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		6843882FE475C46042EC0938 /* Pods_VKClientTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VKClientTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -146,6 +148,7 @@
 				191B4136268E05A80066047B /* Extension */,
 				19C98FFE2682747E00390736 /* Resources */,
 				1990249926836FDE004F5527 /* App */,
+				19CA7565269859A100F15FB7 /* TabBarViewController.swift */,
 			);
 			path = VKClient;
 			sourceTree = "<group>";
@@ -502,6 +505,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				193048692682143500A3AF0B /* FriendsViewController.swift in Sources */,
+				19CA7566269859A100F15FB7 /* TabBarViewController.swift in Sources */,
 				19C99000268274C300390736 /* Session.swift in Sources */,
 				191B4128268CC4030066047B /* APIServise.swift in Sources */,
 				19CA75592697922400F15FB7 /* Friends.swift in Sources */,
@@ -684,7 +688,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R48C6P8ZZH;
 				INFOPLIST_FILE = VKClient/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -705,7 +709,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = R48C6P8ZZH;
 				INFOPLIST_FILE = VKClient/Resources/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

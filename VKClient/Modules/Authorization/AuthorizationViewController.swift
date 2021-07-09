@@ -55,7 +55,11 @@ final class AuthorizationViewController: UIViewController {
     }
 
     private func showMainTabBar() {
-        navigationController?.pushViewController(FriendsViewController(), animated: true)
+//        navigationController?.pushViewController(FriendsViewController(), animated: true)
+        let tb = TabBarViewController()
+        tb.modalPresentationStyle = .fullScreen
+        present(tb, animated: true)
+
     }
 }
 

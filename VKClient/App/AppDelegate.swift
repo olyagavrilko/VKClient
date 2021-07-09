@@ -15,9 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let vc = AuthorizationViewController()
-        let navigationController = UINavigationController(rootViewController: vc)
+//        let navigationController = UINavigationController(rootViewController: vc)
+//        let tabBarVC = TabBarViewController()
+
         window = UIWindow()
-        window?.rootViewController = navigationController
+//        window?.rootViewController = navigationController
+        window?.rootViewController = vc
         window?.makeKeyAndVisible()
         return true
     }
