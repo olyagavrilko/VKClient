@@ -14,13 +14,14 @@ class TabBarViewController: UITabBarController {
         view.backgroundColor = .systemBackground
         UITabBar.appearance().barTintColor = .systemBackground
         navigationItem.largeTitleDisplayMode = .never
-        tabBar.tintColor = .label
+        tabBar.tintColor = UIColor(red: 45/255, green: 129/255, blue: 224/255, alpha: 1)
         setupVCs()
     }
 
     private func setupVCs() {
         viewControllers = [
-            createNavController(for: FriendsViewController(), title: "Друзья", image: UIImage.init(systemName: "person.2.fill")!)
+            createNavController(for: FriendsViewController(), title: "Друзья", image: UIImage.init(systemName: "person.2")!),
+            createNavController(for: MyGroupsViewController(), title: "Сообщества", image: UIImage.init(systemName: "person.3")!)
         ]
     }
     
@@ -33,9 +34,8 @@ class TabBarViewController: UITabBarController {
         let navController = UINavigationController(rootViewController: rootViewController)
         navController.tabBarItem.title = title
         navController.tabBarItem.image = image
-        navController.navigationBar.prefersLargeTitles = true
+        navController.navigationBar.prefersLargeTitles = false
         rootViewController.navigationItem.title = title
         return navController
     }
-
 }

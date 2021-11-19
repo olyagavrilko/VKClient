@@ -1,30 +1,28 @@
 //
-//  FriendCell.swift
+//  GroupCell.swift
 //  VKClient
 //
-//  Created by Olya Ganeva on 07.07.2021.
+//  Created by Olya Ganeva on 16.07.2021.
 //
 
 import UIKit
 
-class FriendCell: UITableViewCell {
+class GroupCell: UITableViewCell {
 
-    var userId = Int()
     let photoImageView = CachedImageView()
     let titleLabel = UILabel()
     let subtitleLabel = UILabel()
 
-    var friendItem: User? {
+    var groupItem: Group? {
         didSet {
-            guard let friendItem = friendItem else {
+            guard let groupItem = groupItem else {
                 return
             }
 
-            userId = friendItem.id
             photoImageView.image = UIImage()
-            photoImageView.load(friendItem.photo100)
-            titleLabel.text = "\(friendItem.firstName) \(friendItem.lastName)"
-            subtitleLabel.text = friendItem.city?.title
+            photoImageView.load(groupItem.photo100)
+            titleLabel.text = groupItem.name
+            subtitleLabel.text = groupItem.activity
         }
     }
 
@@ -41,27 +39,29 @@ class FriendCell: UITableViewCell {
         photoImageView.backgroundColor = .white
         photoImageView.layer.cornerRadius = 25
         photoImageView.clipsToBounds = true
-        addSubview(photoImageView)
+        contentView.addSubview(photoImageView)
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            photoImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            photoImageView.topAnchor.constraint(equalTo: topAnchor, constant: 16),
-            photoImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
+            photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
+            photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
             photoImageView.widthAnchor.constraint(equalToConstant: 50),
             photoImageView.heightAnchor.constraint(equalToConstant: 50)
         ])
+
         titleLabel.font = .systemFont(ofSize: 16)
-        addSubview(titleLabel)
+        contentView.addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: photoImageView.trailingAnchor, constant: 8),
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16)
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16)
         ])
+
         subtitleLabel.font = .systemFont(ofSize: 14)
         subtitleLabel.textColor = .lightGray
         subtitleLabel.numberOfLines = 0
-        addSubview(subtitleLabel)
+        contentView.addSubview(subtitleLabel)
         subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             subtitleLabel.leadingAnchor.constraint(equalTo: photoImageView.trailingAnchor, constant: 8),

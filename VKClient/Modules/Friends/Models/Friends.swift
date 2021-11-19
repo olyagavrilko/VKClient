@@ -8,25 +8,23 @@
 import Foundation
 
 // MARK: - Welcome
-struct UsersResponse: Codable {
+struct UsersResponse: Decodable {
     let response: InternalUsersResponse
 }
 
 // MARK: - Response
-struct InternalUsersResponse: Codable {
+struct InternalUsersResponse: Decodable {
     let count: Int
     let items: [User]
 }
 
 // MARK: - Item
-class User: Codable {
+class User: Decodable {
     let firstName: String
     let id: Int
     let lastName: String
     let photo100: String
     let city: City?
-    let trackCode: String
-    let lists: [Int]?
 
     enum CodingKeys: String, CodingKey {
         case firstName = "first_name"
@@ -34,8 +32,6 @@ class User: Codable {
         case lastName = "last_name"
         case photo100 = "photo_100"
         case city
-        case trackCode = "track_code"
-        case lists
     }
 }
 
@@ -44,13 +40,3 @@ struct City: Codable {
     let id: Int
     let title: String
 }
-
-//enum Title: String, Codable {
-//    case atlanta = "Atlanta"
-//    case losAngeles = "Los Angeles"
-//    case владивосток = "Владивосток"
-//    case москва = "Москва"
-//    case санктПетербург = "Санкт-Петербург"
-//    case уссурийск = "Уссурийск"
-//}
-

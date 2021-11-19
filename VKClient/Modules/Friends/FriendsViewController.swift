@@ -7,18 +7,7 @@
 
 import UIKit
 
-//struct User1 {
-//    var name: String
-//}
-
 final class FriendsViewController: UIViewController {
-
-//    let users = [
-//        User1(name: "1"),
-//        User1(name: "2"),
-//        User1(name: "3"),
-//        User1(name: "4")
-//    ]
 
     private let tableView = UITableView()
     private let apiService = APIService()
@@ -28,18 +17,15 @@ final class FriendsViewController: UIViewController {
         super.viewDidLoad()
         setupViews()
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
-//        tableView.delegate = self
+        tableView.separatorStyle = .none
+        tableView.delegate = self
         tableView.dataSource = self
 
         apiService.getFriends { users in
 
             self.friends = users
             self.tableView.reloadData()
-//            print(users)
         }
-//        apiService.getPhotos()
-//        apiService.getGroups()
-//        apiService.searchGroups()
     }
 
     private func setupViews() {
@@ -67,5 +53,22 @@ extension FriendsViewController: UITableViewDataSource {
         cell.friendItem = friends[indexPath.row]
 
         return cell
+    }
+}
+extension FriendsViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        let cell = tableView.cellForRow(at: indexPath) as! FriendCell
+
+        let vc = FriendGalleryViewController()
+        vc.userId = cell.userId
+        
+        apiService.getPhotos(userId: "\(cell.userId)") { photos in
+
+            vc.photos = photos
+        }
+
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

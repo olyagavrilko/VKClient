@@ -7,24 +7,58 @@
 
 import UIKit
 
-extension UIImageView {
+//extension UIImageView {
+//
+//    static var dict: [String: UIImage] = [:]
+//
+//    func load(_ urlString: String) {
+//        if let image = UIImageView.dict[urlString] {
+//            self.image = image
+//            return
+//        }
+//        guard let url = URL(string: urlString) else {
+//            return
+//        }
+//        DispatchQueue.global().async { [weak self] in
+//            if let data = try? Data(contentsOf: url) {
+//                if let image = UIImage(data: data) {
+//                    DispatchQueue.main.async {
+//                        UIImageView.dict[urlString] = image
+//                        self?.image = image
+//                    }
+//                }
+//            }
+//        }
+//    }
+//}
 
-    static var dict: [String: UIImage] = [:]
+final class CachedImageView: UIImageView {
+
+    private var imageURL: URL?
+
+    static var dict: [URL: UIImage] = [:]
 
     func load(_ urlString: String) {
-        if let image = UIImageView.dict[urlString] {
-            self.image = image
-            return
-        }
+
         guard let url = URL(string: urlString) else {
             return
         }
+
+        imageURL = url
+
+        if let image = Self.dict[url] {
+            self.image = image
+            return
+        }
+
         DispatchQueue.global().async { [weak self] in
             if let data = try? Data(contentsOf: url) {
                 if let image = UIImage(data: data) {
                     DispatchQueue.main.async {
-                        UIImageView.dict[urlString] = image
-                        self?.image = image
+                        Self.dict[url] = image
+                        if self?.imageURL == url {
+                            self?.image = image
+                        }
                     }
                 }
             }

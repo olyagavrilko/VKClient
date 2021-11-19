@@ -55,7 +55,6 @@ final class AuthorizationViewController: UIViewController {
     }
 
     private func showMainTabBar() {
-//        navigationController?.pushViewController(FriendsViewController(), animated: true)
         let tb = TabBarViewController()
         tb.modalPresentationStyle = .fullScreen
         present(tb, animated: true)
@@ -90,6 +89,7 @@ extension AuthorizationViewController: WKNavigationDelegate {
 
         if let token = params["access_token"], let userId = params["user_id"] {
             print("TOKEN = ", token as Any)
+            print("userId = ", userId as Any)
             Session.shared.token = token
             Session.shared.userId = userId
 
