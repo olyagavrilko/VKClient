@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 // MARK: - Welcome
 struct UsersResponse: Decodable {
@@ -13,17 +14,17 @@ struct UsersResponse: Decodable {
 }
 
 // MARK: - Response
-struct InternalUsersResponse: Decodable {
-    let count: Int
+class InternalUsersResponse: Object, Decodable {
+    @objc dynamic var count: Int
     let items: [User]
 }
 
 // MARK: - Item
-class User: Decodable {
-    let firstName: String
-    let id: Int
-    let lastName: String
-    let photo100: String
+class User: Object, Decodable {
+    @objc dynamic var firstName: String
+    @objc dynamic var id: Int
+    @objc dynamic var lastName: String
+    @objc dynamic var photo100: String
     let city: City?
 
     enum CodingKeys: String, CodingKey {
@@ -36,7 +37,7 @@ class User: Decodable {
 }
 
 // MARK: - City
-struct City: Codable {
-    let id: Int
-    let title: String
+class City: Object, Codable {
+    @objc dynamic var id: Int
+    @objc dynamic var title: String
 }

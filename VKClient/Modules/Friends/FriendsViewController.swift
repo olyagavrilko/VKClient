@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 final class FriendsViewController: UIViewController {
 
@@ -25,6 +26,19 @@ final class FriendsViewController: UIViewController {
 
             self.friends = users
             self.tableView.reloadData()
+
+            self.saveFriendsData(users)
+        }
+    }
+
+    private func saveFriendsData(_ friends: [User]) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.add(friends)
+            try realm.commitWrite()
+        } catch {
+            print("Error")
         }
     }
 

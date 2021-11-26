@@ -6,8 +6,7 @@
 //
 
 import Foundation
-
-import Foundation
+import RealmSwift
 
 // MARK: - Welcome
 struct PhotoResponse: Decodable {
@@ -15,17 +14,17 @@ struct PhotoResponse: Decodable {
 }
 
 // MARK: - Response
-struct InternalPhotoResponse: Decodable {
-    let count: Int
+class InternalPhotoResponse: Object, Decodable {
+    @objc dynamic var count: Int
     let items: [Photo]
 }
 
 // MARK: - Item
-class Photo: Decodable {
-    let albumID, date, id, ownerID: Int
-    let hasTags: Bool
+class Photo: Object, Decodable {
+    @objc dynamic var albumID, date, id, ownerID: Int
+    @objc dynamic var hasTags: Bool
     let sizes: [Size]
-    let text: String
+    @objc dynamic var text: String
     let likes: Likes
     let reposts: Reposts
     let postID: Int?
@@ -41,8 +40,8 @@ class Photo: Decodable {
 }
 
 // MARK: - Likes
-struct Likes: Codable {
-    let userLikes, count: Int
+class Likes: Object, Codable {
+    @objc dynamic var userLikes, count: Int
 
     enum CodingKeys: String, CodingKey {
         case userLikes = "user_likes"
@@ -51,14 +50,14 @@ struct Likes: Codable {
 }
 
 // MARK: - Reposts
-struct Reposts: Codable {
-    let count: Int
+class Reposts: Object, Codable {
+    @objc dynamic var count: Int
 }
 
 // MARK: - Size
-struct Size: Codable {
-    let height: Int
-    let url: String?
-    let type: String
-    let width: Int
+class Size: Object, Codable {
+    @objc dynamic var height: Int
+    @objc dynamic var url: String?
+    @objc dynamic var type: String
+    @objc dynamic var width: Int
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class FriendGalleryViewController: UIViewController {
 
@@ -42,6 +43,18 @@ class FriendGalleryViewController: UIViewController {
         apiService.getPhotos(userId: "\(userId)") { photos in
             self.photos = photos
             self.collectionView.reloadData()
+            self.savePhotosData(photos)
+        }
+    }
+
+    private func savePhotosData(_ photos: [Photo]) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.add(photos)
+            try realm.commitWrite()
+        } catch {
+            print("Error")
         }
     }
 }
