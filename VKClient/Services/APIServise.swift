@@ -8,18 +8,14 @@
 import Alamofire
 import Foundation
 
-struct User {
-
-}
-
 final class APIService {
 
     private let baseURL = "https://api.vk.com/method"
     private let token = Session.shared.token
     private let clientID = Session.shared.userId
-    private let version = "5.21"
+    private let version = "5.131"
 
-    func getFriends(completion: ([User]) -> ()) {
+    func getFriends(completion: @escaping ([User]) -> Void) {
 
         let url = baseURL + "/friends.get"
 
@@ -27,7 +23,7 @@ final class APIService {
             "user_id": clientID,
             "order": "name",
             "count": 50,
-            "fields": "photo_100",
+            "fields": "city, photo_100",
             "access_token": Session.shared.token,
             "v": version
         ]
@@ -38,21 +34,29 @@ final class APIService {
                 return
             }
 
-            print(data.prettyJSON as Any)
+            let friendsResponse = try? JSONDecoder().decode(UsersResponse.self, from: data)
+
+            guard let friends = friendsResponse?.response.items else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(friends)
+            }
         }
-        completion([])
     }
 
-    func getPhotos() {
+    func getPhotos(userId: String, completion: @escaping ([Photo]) -> Void)  {
 
         let url = baseURL + "/photos.get"
 
         let parameters: Parameters = [
-            "owner_id": "199549688",
+            "owner_id": userId,
             "album_id": "profile",
-            "rev": 1,
+            "extended": 1,
+            "count": 25,
             "access_token": Session.shared.token,
-            "v": "5.77"
+            "v": "5.131"
         ]
 
         AF.request(url, method: .get, parameters: parameters).responseData { response in
@@ -61,19 +65,28 @@ final class APIService {
                 return
             }
 
-            print(data.prettyJSON as Any)
+            let photoResponse = try? JSONDecoder().decode(PhotoResponse.self, from: data)
+
+            guard let photos = photoResponse?.response.items else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(photos)
+            }
         }
     }
 
-    func getGroups() {
+    func getGroups(completion: @escaping ([Group]) -> Void) {
 
         let url = baseURL + "/groups.get"
 
         let parameters: Parameters = [
-            "user_id": "199549688",
+            "user_id": "225909217",
             "extended": 1,
+            "fields": "activity",
             "access_token": Session.shared.token,
-            "v": "5.124"
+            "v": "5.131"
         ]
 
         AF.request(url, method: .get, parameters: parameters).responseData { response in
@@ -82,20 +95,31 @@ final class APIService {
                 return
             }
 
-            print(data.prettyJSON as Any)
+            let groupsResponse = try? JSONDecoder().decode(GroupsResponse.self, from: data)
+
+            guard let groups = groupsResponse?.response.items else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(groups)
+            }
         }
     }
 
-    func searchGroups() {
+    func searchGroups(text: String, completion: @escaping ([Group]) -> Void) {
 
         let url = baseURL + "/groups.search"
 
+        let searchText = text
+
         let parameters: Parameters = [
-            "q": "Музыка",
-            "type": "group",
-            "count": 2,
+            "q": searchText,
+            "type": "group, page, event",
+            "sort": 0,
+            "count": 100,
             "access_token": Session.shared.token,
-            "v": "5.124"
+            "v": "5.131"
         ]
 
         AF.request(url, method: .get, parameters: parameters).responseData { response in
@@ -104,7 +128,111 @@ final class APIService {
                 return
             }
 
-            print(data.prettyJSON as Any)
+            let groupsResponse = try? JSONDecoder().decode(GroupsResponse.self, from: data)
+
+            guard let groups = groupsResponse?.response.items else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(groups)
+            }
+        }
+    }
+
+    func joinGroup(id: Int, completion: @escaping (Int) -> Void) {
+
+        let url = baseURL + "/groups.join"
+
+        let parameters: Parameters = [
+            "group_id": id,
+            "access_token": Session.shared.token,
+            "v": "5.131"
+        ]
+
+        AF.request(url, method: .get, parameters: parameters).responseData { response in
+
+            guard let data = response.data else {
+                return
+            }
+
+            let joinResponse = try? JSONDecoder().decode(JoinResponse.self, from: data)
+
+            guard let response = joinResponse?.response else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(response)
+            }
+        }
+    }
+
+    func leaveGroup(id: Int, completion: @escaping (Int) -> Void) {
+
+        let url = baseURL + "/groups.leave"
+
+        let parameters: Parameters = [
+            "group_id": id,
+            "access_token": Session.shared.token,
+            "v": "5.131"
+        ]
+
+        AF.request(url, method: .get, parameters: parameters).responseData { response in
+
+            guard let data = response.data else {
+                return
+            }
+
+            let leaveResponse = try? JSONDecoder().decode(LeaveResponse.self, from: data)
+
+            guard let response = leaveResponse?.response else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(response)
+            }
         }
     }
 }
+
+//    func getFriends(completion: ([User]) -> ()) {
+//
+//        let url = baseURL + "/friends.get"
+//
+//        let parameters: Parameters = [
+//            "user_id": clientID,
+//            "order": "name",
+//            "count": 50,
+//            "fields": "city, photo_100",
+//            "access_token": Session.shared.token,
+//            "v": version
+//        ]
+//
+//        AF.request(url, method: .get, parameters: parameters).responseData { response in
+//
+//            guard let data = response.data else {
+//                return
+//            }
+//            print(data.prettyJSON as Any)
+//
+//            guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else {
+//                return
+//            }
+//
+//            let object = json as! [String: Any]
+//            let response = object["response"] as! [String: Any]
+//            let items = response["items"] as! [Any]
+//
+//            for userJson in items {
+//                let userJson = userJson as! [String: Any]
+//                let id = userJson["id"] as! Int
+//                let lastName = userJson["last_name"] as! String
+//                let city = userJson["city"] as! [String: Any]
+//                let cityTitle = city["title"] as! String
+//                let firstName = userJson["first_name"] as! String
+//            }
+//        }
+//        completion([])
+//    }

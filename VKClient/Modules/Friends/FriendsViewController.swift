@@ -6,22 +6,40 @@
 //
 
 import UIKit
+import RealmSwift
 
 final class FriendsViewController: UIViewController {
 
     private let tableView = UITableView()
     private let apiService = APIService()
+    var friends = [User]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupViews()
+        tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
+        tableView.separatorStyle = .none
+        tableView.delegate = self
+        tableView.dataSource = self
 
         apiService.getFriends { users in
-            print("getFriends")
+
+            self.friends = users
+            self.tableView.reloadData()
+
+            self.saveFriendsData(users)
         }
-        apiService.getPhotos()
-        apiService.getGroups()
-        apiService.searchGroups()
+    }
+
+    private func saveFriendsData(_ friends: [User]) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.add(friends)
+            try realm.commitWrite()
+        } catch {
+            print("Error")
+        }
     }
 
     private func setupViews() {
@@ -33,5 +51,38 @@ final class FriendsViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+}
+
+
+extension FriendsViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return friends.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell: FriendCell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as? FriendCell else {
+            return UITableViewCell()
+        }
+        cell.friendItem = friends[indexPath.row]
+
+        return cell
+    }
+}
+extension FriendsViewController: UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        let cell = tableView.cellForRow(at: indexPath) as! FriendCell
+
+        let vc = FriendGalleryViewController()
+        vc.userId = cell.userId
+        
+        apiService.getPhotos(userId: "\(cell.userId)") { photos in
+
+            vc.photos = photos
+        }
+
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
