@@ -12,9 +12,10 @@ class MyGroupsViewController: UIViewController {
 
     private let tableView = UITableView()
     private let apiService = APIService()
-    private var groups = [Group]()
+    private var groups: Results<Group>?
 
     let realm = RealmManager.shared
+    var token: NotificationToken?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,6 +29,8 @@ class MyGroupsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
+        loadFromCache()
+        subscribe()
         loadData()
     }
 
@@ -41,13 +44,47 @@ class MyGroupsViewController: UIViewController {
         apiService.getGroups { result in
             switch result {
             case .success(let groups):
-                self.groups = groups
                 self.saveGroupsData(groups)
             case .failure:
-                self.groups = self.realm?.getObjects(type: Group.self).toArray() ?? []
+                break
             }
-            self.tableView.reloadData()
         }
+    }
+
+    func subscribe() {
+        self.groups = self.realm?.getObjects(type: Group.self)
+
+        token = groups?.observe { changes in
+
+            switch changes {
+            case .initial:
+                self.tableView.reloadData()
+
+            case .update(_,
+                         let deletions,
+                         let insertions,
+                         let modifications):
+                let deletionsIndexPath = deletions.map { IndexPath(row: $0, section: 0) }
+                let insertionsIndexPath = insertions.map { IndexPath(row: $0, section: 0) }
+                let modificationsIndexPath = modifications.map { IndexPath(row: $0, section: 0) }
+
+                DispatchQueue.main.async {
+                    self.tableView.beginUpdates()
+                    self.tableView.insertRows(at: insertionsIndexPath, with: .automatic)
+                    self.tableView.deleteRows(at: deletionsIndexPath, with: .automatic)
+                    self.tableView.reloadRows(at: modificationsIndexPath, with: .automatic)
+                    self.tableView.endUpdates()
+                }
+
+            case .error(let error):
+                print("\(error)")
+            }
+        }
+    }
+
+    private func loadFromCache() {
+        self.groups = self.realm?.getObjects(type: Group.self)
+        self.tableView.reloadData()
     }
 
     private func saveGroupsData(_ groups: [Group]) {
@@ -55,6 +92,13 @@ class MyGroupsViewController: UIViewController {
             let realm = try Realm()
             realm.beginWrite()
             realm.add(groups, update: .modified)
+            let cachedGroups = realm.objects(Group.self).toArray()
+            let deletedGroups = cachedGroups.filter { cachedGroup in
+                !groups.contains { $0.id == cachedGroup.id }
+            }
+            deletedGroups.forEach {
+                realm.delete($0)
+            }
             try realm.commitWrite()
         } catch {
             print("Error")
@@ -75,7 +119,11 @@ class MyGroupsViewController: UIViewController {
 
 extension MyGroupsViewController: UITableViewDelegate {
     private func leaveButtonDidTap(with indexPath: Int) {
-        apiService.leaveGroup(id: groups[indexPath].id) { response in
+        guard let id = groups?[indexPath].id else {
+            return
+        }
+
+        apiService.leaveGroup(id: id) { response in
             if response == 1 {
                 self.loadData()
                 self.tableView.reloadData()
@@ -97,14 +145,14 @@ extension MyGroupsViewController: UITableViewDelegate {
 
 extension MyGroupsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups.count
+        return groups?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell: GroupCell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as? GroupCell else {
             return UITableViewCell()
         }
-        cell.groupItem = groups[indexPath.row]
+        cell.groupItem = groups?[indexPath.row]
         return cell
     }
 }

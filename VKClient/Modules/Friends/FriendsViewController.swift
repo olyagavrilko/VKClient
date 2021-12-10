@@ -8,25 +8,16 @@
 import UIKit
 import RealmSwift
 
-extension Results {
-    func toArray() -> [Element] {
-      return compactMap {
-        $0
-      }
-    }
- }
-
 final class FriendsViewController: UIViewController {
 
     private let tableView = UITableView()
     private let apiService = APIService()
-    var friends = [User]()
+    private var friends: Results<User>?
 
     let realm = RealmManager.shared
+    var token: NotificationToken?
 
     override func viewDidLoad() {
-
-//        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
 
         super.viewDidLoad()
         setupViews()
@@ -35,15 +26,53 @@ final class FriendsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
+        loadFromCache()
+        subscribe()
+        loadData()
+    }
+
+    private func loadFromCache() {
+        friends = realm?.getObjects(type: User.self)
+        tableView.reloadData()
+    }
+
+    private func subscribe() {
+        friends = realm?.getObjects(type: User.self)
+
+        token = friends?.observe { [weak self] changes in
+
+            switch changes {
+            case .initial:
+                self?.tableView.reloadData()
+            case .update(_,
+                         let deletions,
+                         let insertions,
+                         let modifications):
+                let deletionsIndexPath = deletions.map { IndexPath(row: $0, section: 0) }
+                let insertionsIndexPath = insertions.map { IndexPath(row: $0, section: 0) }
+                let modificationsIndexPath = modifications.map { IndexPath(row: $0, section: 0) }
+
+                DispatchQueue.main.async {
+                    self?.tableView.beginUpdates()
+                    self?.tableView.insertRows(at: insertionsIndexPath, with: .automatic)
+                    self?.tableView.deleteRows(at: deletionsIndexPath, with: .automatic)
+                    self?.tableView.reloadRows(at: modificationsIndexPath, with: .automatic)
+                    self?.tableView.endUpdates()
+                }
+            case .error(let error):
+                print("\(error)")
+            }
+        }
+    }
+
+    private func loadData() {
         apiService.getFriends { result in
             switch result {
             case .success(let users):
-                self.friends = users
                 self.saveFriendsData(users)
             case .failure:
-                self.friends = self.realm?.getObjects(type: User.self).toArray() ?? []
+                break
             }
-            self.tableView.reloadData()
         }
     }
 
@@ -71,17 +100,16 @@ final class FriendsViewController: UIViewController {
     }
 }
 
-
 extension FriendsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return friends.count
+        return friends?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell: FriendCell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as? FriendCell else {
             return UITableViewCell()
         }
-        cell.friendItem = friends[indexPath.row]
+        cell.friendItem = friends?[indexPath.row]
 
         return cell
     }
@@ -92,17 +120,12 @@ extension FriendsViewController: UITableViewDelegate {
 
         let cell = tableView.cellForRow(at: indexPath) as! FriendCell
 
-        guard let user = friends.first(where: { $0.id == cell.userId }) else {
+        guard let user = friends?.first(where: { $0.id == cell.userId }) else {
             return
         }
 
         let vc = FriendGalleryViewController()
         vc.user = user
-        
-//        apiService.getPhotos(userId: "\(cell.userId)") { photos in
-//
-//            vc.photos = photos
-//        }
 
         navigationController?.pushViewController(vc, animated: true)
     }
