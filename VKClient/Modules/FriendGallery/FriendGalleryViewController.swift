@@ -12,7 +12,9 @@ class FriendGalleryViewController: UIViewController {
 
     private let apiService = APIService()
     var photos = [Photo]()
-    var userId = 0
+    var user: User?
+
+    let realm = RealmManager.shared
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -26,6 +28,9 @@ class FriendGalleryViewController: UIViewController {
     }()
 
     override func viewDidLoad() {
+
+//        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+
         super.viewDidLoad()
         collectionView.backgroundColor = .white
 
@@ -39,11 +44,22 @@ class FriendGalleryViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
+        guard let userID = user?.id else {
+            return
+        }
 
-        apiService.getPhotos(userId: "\(userId)") { photos in
-            self.photos = photos
+        apiService.getPhotos(userId: userID) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            switch result {
+            case .success(let photos):
+                self.photos = photos
+                self.savePhotosData(photos)
+            case .failure:
+                self.photos = self.realm?.getObjects(type: Photo.self).filter("owner_id == \(userID)").toArray() ?? []
+            }
             self.collectionView.reloadData()
-            self.savePhotosData(photos)
         }
     }
 
@@ -51,7 +67,8 @@ class FriendGalleryViewController: UIViewController {
         do {
             let realm = try Realm()
             realm.beginWrite()
-            realm.add(photos)
+            realm.add(photos, update: .modified)
+            user?.photos.append(objectsIn: photos)
             try realm.commitWrite()
         } catch {
             print("Error")
@@ -66,7 +83,6 @@ extension FriendGalleryViewController: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCell", for: indexPath) as! GalleryCell
-
         cell.photo = photos[indexPath.row]
         return cell
     }

@@ -14,6 +14,8 @@ class MyGroupsViewController: UIViewController {
     private let apiService = APIService()
     private var groups = [Group]()
 
+    let realm = RealmManager.shared
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -36,23 +38,28 @@ class MyGroupsViewController: UIViewController {
     }
 
     func loadData() {
-        apiService.getGroups { groups in
-            self.groups = groups
+        apiService.getGroups { result in
+            switch result {
+            case .success(let groups):
+                self.groups = groups
+                self.saveGroupsData(groups)
+            case .failure:
+                self.groups = self.realm?.getObjects(type: Group.self).toArray() ?? []
+            }
             self.tableView.reloadData()
-//            self.saveGroupsData(groups)
         }
     }
 
-//    private func saveGroupsData(_ groups: [Group]) {
-//        do {
-//            let realm = try Realm()
-//            realm.beginWrite()
-//            realm.add(groups)
-//            try realm.commitWrite()
-//        } catch {
-//            print("Error")
-//        }
-//    }
+    private func saveGroupsData(_ groups: [Group]) {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.add(groups, update: .modified)
+            try realm.commitWrite()
+        } catch {
+            print("Error")
+        }
+    }
 
     private func setupViews() {
         view.addSubview(tableView)

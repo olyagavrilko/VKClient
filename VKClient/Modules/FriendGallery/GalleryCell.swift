@@ -12,14 +12,12 @@ class GalleryCell: UICollectionViewCell {
     private let imageView = CachedImageView()
 
     var photo: Photo? {
-        
         didSet {
             guard let photo = photo else {
                 return
             }
-            imageView.image = UIImage()
 
-            guard let url = photo.sizes.last?.url else {
+            guard let url = photo.sizes.first?.url else {
                 return
             }
 

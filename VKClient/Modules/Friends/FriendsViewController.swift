@@ -8,13 +8,26 @@
 import UIKit
 import RealmSwift
 
+extension Results {
+    func toArray() -> [Element] {
+      return compactMap {
+        $0
+      }
+    }
+ }
+
 final class FriendsViewController: UIViewController {
 
     private let tableView = UITableView()
     private let apiService = APIService()
     var friends = [User]()
 
+    let realm = RealmManager.shared
+
     override func viewDidLoad() {
+
+//        Realm.Configuration.defaultConfiguration = Realm.Configuration(deleteRealmIfMigrationNeeded: true)
+
         super.viewDidLoad()
         setupViews()
         tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
@@ -22,20 +35,24 @@ final class FriendsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
-        apiService.getFriends { users in
-
-            self.friends = users
+        apiService.getFriends { result in
+            switch result {
+            case .success(let users):
+                self.friends = users
+                self.saveFriendsData(users)
+            case .failure:
+                self.friends = self.realm?.getObjects(type: User.self).toArray() ?? []
+            }
             self.tableView.reloadData()
-
-            self.saveFriendsData(users)
         }
     }
 
     private func saveFriendsData(_ friends: [User]) {
         do {
             let realm = try Realm()
+            print(realm.configuration.fileURL)
             realm.beginWrite()
-            realm.add(friends)
+            realm.add(friends, update: .modified)
             try realm.commitWrite()
         } catch {
             print("Error")
@@ -75,13 +92,17 @@ extension FriendsViewController: UITableViewDelegate {
 
         let cell = tableView.cellForRow(at: indexPath) as! FriendCell
 
-        let vc = FriendGalleryViewController()
-        vc.userId = cell.userId
-        
-        apiService.getPhotos(userId: "\(cell.userId)") { photos in
-
-            vc.photos = photos
+        guard let user = friends.first(where: { $0.id == cell.userId }) else {
+            return
         }
+
+        let vc = FriendGalleryViewController()
+        vc.user = user
+        
+//        apiService.getPhotos(userId: "\(cell.userId)") { photos in
+//
+//            vc.photos = photos
+//        }
 
         navigationController?.pushViewController(vc, animated: true)
     }

@@ -17,6 +17,7 @@
 		193048742682143700A3AF0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 193048722682143700A3AF0B /* LaunchScreen.storyboard */; };
 		1930487F2682143800A3AF0B /* VKClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1930487E2682143800A3AF0B /* VKClientTests.swift */; };
 		1930488A2682143800A3AF0B /* VKClientUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193048892682143800A3AF0B /* VKClientUITests.swift */; };
+		193F257627620CF60080725B /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193F257527620CF60080725B /* RealmManager.swift */; };
 		195D6BA727453353008AC4C4 /* GroupSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195D6BA627453353008AC4C4 /* GroupSearchViewController.swift */; };
 		199024A826837A98004F5527 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199024A726837A98004F5527 /* AuthorizationViewController.swift */; };
 		19A1BD6626A1A3E100154416 /* MyGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1BD6526A1A3E100154416 /* MyGroupsViewController.swift */; };
@@ -67,6 +68,7 @@
 		193048852682143800A3AF0B /* VKClientUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VKClientUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		193048892682143800A3AF0B /* VKClientUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VKClientUITests.swift; sourceTree = "<group>"; };
 		1930488B2682143800A3AF0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		193F257527620CF60080725B /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		195D6BA627453353008AC4C4 /* GroupSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSearchViewController.swift; sourceTree = "<group>"; };
 		199024A726837A98004F5527 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 		19A1BD6526A1A3E100154416 /* MyGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsViewController.swift; sourceTree = "<group>"; };
@@ -194,6 +196,7 @@
 			children = (
 				19C98FFF268274C300390736 /* Session.swift */,
 				191B4127268CC4020066047B /* APIServise.swift */,
+				193F257527620CF60080725B /* RealmManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				19CA75722698C55400F15FB7 /* Photo.swift in Sources */,
 				19A1BD6E26A1A40E00154416 /* GroupCell.swift in Sources */,
 				1930486F2682143500A3AF0B /* VKClient.xcdatamodeld in Sources */,
+				193F257627620CF60080725B /* RealmManager.swift in Sources */,
 				19CA75612697A6CB00F15FB7 /* UIImageView+Extension.swift in Sources */,
 				19A1BD6626A1A3E100154416 /* MyGroupsViewController.swift in Sources */,
 				193048652682143500A3AF0B /* AppDelegate.swift in Sources */,
