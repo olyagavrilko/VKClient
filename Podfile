@@ -8,6 +8,8 @@ target 'VKClient' do
   # Pods for VKClient
   pod 'Alamofire'
   pod 'RealmSwift'
+  pod 'Firebase/Auth'
+  pod 'Firebase/Database'
 
   target 'VKClientTests' do
     inherit! :search_paths
