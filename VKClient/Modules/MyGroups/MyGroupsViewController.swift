@@ -7,12 +7,15 @@
 
 import UIKit
 import RealmSwift
+import FirebaseDatabase
 
 class MyGroupsViewController: UIViewController {
 
     private let tableView = UITableView()
     private let apiService = APIService()
     private var groups: Results<Group>?
+    private var communitiesFirebase = [FirebaseCommunity]()
+    private var ref = Database.database().reference(withPath: "Users")
 
     let realm = RealmManager.shared
     var token: NotificationToken?
@@ -32,6 +35,18 @@ class MyGroupsViewController: UIViewController {
         loadFromCache()
         subscribe()
         loadData()
+
+        ref.observe(.value) { snapshot in
+            var communities: [FirebaseCommunity] = []
+            for child in snapshot.children {
+                if let snapshot = child as? DataSnapshot,
+                   let city = FirebaseCommunity(snapshot: snapshot) {
+                    communities.append(city)
+                }
+            }
+            communities.forEach { print($0.name) }
+            print(communities.count)
+        }
     }
 
     @objc private func addTapped() {
@@ -159,7 +174,12 @@ extension MyGroupsViewController: UITableViewDataSource {
 
 extension MyGroupsViewController: GroupSearchViewControllerDelgate {
 
-    func groupSelected() {
+    func groupSelected(id: Int, name: String) {
+        let firebaseUser = FirebaseUser(id: Int(Session.shared.userId) ?? 0)
+        firebaseUser.communities.append(FirebaseCommunity(name: name, id: id))
+
+        let userRef = self.ref.child(Session.shared.userId)
+        userRef.setValue(firebaseUser.toAnyObject())
         loadData()
     }
 }

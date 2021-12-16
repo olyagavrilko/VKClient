@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import FirebaseDatabase
 
 protocol GroupSearchViewControllerDelgate: AnyObject {
-    func groupSelected()
+    func groupSelected(id: Int, name: String)
 }
 
 class GroupSearchViewController: UIViewController {
@@ -75,11 +76,12 @@ extension GroupSearchViewController: UITableViewDelegate {
         let alertController = UIAlertController(title: "", message: "Вступить в сообщество?", preferredStyle: .alert)
 
         alertController.addAction(UIAlertAction(title: "Да", style: .default) { [weak self] _ in
-            guard let groupID = self?.groups[indexPath.row].id else {
+            guard let groupID = self?.groups[indexPath.row].id,
+                  let groupName = self?.groups[indexPath.row].name else {
                 return
             }
             self?.apiService.joinGroup(id: groupID) { response in
-                self?.delegate?.groupSelected()
+                self?.delegate?.groupSelected(id: groupID, name: groupName)
             }
         })
 
