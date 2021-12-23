@@ -14,18 +14,20 @@ struct UsersResponse: Decodable {
 }
 
 // MARK: - Response
-class InternalUsersResponse: Object, Decodable {
-    @objc dynamic var count: Int
+struct InternalUsersResponse: Decodable {
+    let count: Int
     let items: [User]
 }
 
 // MARK: - Item
 class User: Object, Decodable {
-    @objc dynamic var firstName: String
-    @objc dynamic var id: Int
-    @objc dynamic var lastName: String
-    @objc dynamic var photo100: String
-    let city: City?
+    @objc dynamic var firstName = ""
+    @objc dynamic var id = 0
+    @objc dynamic var lastName = ""
+    @objc dynamic var photo100 = ""
+    @objc dynamic var city: City?
+
+    let photos = List<Photo>()
 
     enum CodingKeys: String, CodingKey {
         case firstName = "first_name"
@@ -34,10 +36,14 @@ class User: Object, Decodable {
         case photo100 = "photo_100"
         case city
     }
+
+    override class func primaryKey() -> String? {
+        "id"
+    }
 }
 
 // MARK: - City
 class City: Object, Codable {
-    @objc dynamic var id: Int
-    @objc dynamic var title: String
+    @objc dynamic var id = 0
+    @objc dynamic var title = ""
 }

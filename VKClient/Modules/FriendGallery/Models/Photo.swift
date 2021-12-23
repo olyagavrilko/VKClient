@@ -14,50 +14,35 @@ struct PhotoResponse: Decodable {
 }
 
 // MARK: - Response
-class InternalPhotoResponse: Object, Decodable {
-    @objc dynamic var count: Int
+struct InternalPhotoResponse: Decodable {
+    let count: Int
     let items: [Photo]
 }
 
 // MARK: - Item
 class Photo: Object, Decodable {
-    @objc dynamic var albumID, date, id, ownerID: Int
-    @objc dynamic var hasTags: Bool
-    let sizes: [Size]
-    @objc dynamic var text: String
-    let likes: Likes
-    let reposts: Reposts
-    let postID: Int?
+    var sizes = List<Size>()
+    @objc dynamic var id = 0
+    @objc dynamic var owner_id = 0
 
-    enum CodingKeys: String, CodingKey {
-        case albumID = "album_id"
-        case date, id
-        case ownerID = "owner_id"
-        case hasTags = "has_tags"
-        case sizes, text, likes, reposts
-        case postID = "post_id"
+    override class func primaryKey() -> String? {
+        "id"
     }
-}
 
-// MARK: - Likes
-class Likes: Object, Codable {
-    @objc dynamic var userLikes, count: Int
+//    override class func ignoredProperties() -> [String] {
+//        ["sizes"]
+//    }
 
-    enum CodingKeys: String, CodingKey {
-        case userLikes = "user_likes"
-        case count
-    }
-}
+//    @objc dynamic var owner: User?
 
-// MARK: - Reposts
-class Reposts: Object, Codable {
-    @objc dynamic var count: Int
+//    let user = LinkingObject(fromType: User.self, property: "photos")
+//    let user = LinkingObjects(
 }
 
 // MARK: - Size
 class Size: Object, Codable {
-    @objc dynamic var height: Int
-    @objc dynamic var url: String?
-    @objc dynamic var type: String
-    @objc dynamic var width: Int
+    @objc dynamic var height = 0
+    @objc dynamic var url: String? = nil
+    @objc dynamic var type = ""
+    @objc dynamic var width = 0
 }

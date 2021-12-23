@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 struct GroupsResponse: Decodable {
     let response: InternalGroupsResponse
@@ -16,11 +17,15 @@ struct InternalGroupsResponse: Decodable {
     let items: [Group]
 }
 
-struct Group: Decodable {
-    let id: Int
-    let name: String
-    let photo100: String
-    var activity: String?
+class Group: Object, Decodable {
+    @objc dynamic var id = 0
+    @objc dynamic var name = ""
+    @objc dynamic var photo100 = ""
+    @objc dynamic var activity: String? = nil
+
+    override class func primaryKey() -> String? {
+        "id"
+    }
 
     enum CodingKeys: String, CodingKey {
         case id

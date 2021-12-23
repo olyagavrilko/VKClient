@@ -8,6 +8,10 @@
 import Alamofire
 import Foundation
 
+enum NetworkError: Error {
+    case `default`
+}
+
 final class APIService {
 
     private let baseURL = "https://api.vk.com/method"
@@ -15,7 +19,7 @@ final class APIService {
     private let clientID = Session.shared.userId
     private let version = "5.131"
 
-    func getFriends(completion: @escaping ([User]) -> Void) {
+    func getFriends(completion: @escaping (Result<[User], NetworkError>) -> Void) {
 
         let url = baseURL + "/friends.get"
 
@@ -31,7 +35,7 @@ final class APIService {
         AF.request(url, method: .get, parameters: parameters).responseData { response in
 
             guard let data = response.data else {
-                return
+                return completion(.failure(.default))
             }
 
             let friendsResponse = try? JSONDecoder().decode(UsersResponse.self, from: data)
@@ -41,19 +45,20 @@ final class APIService {
             }
 
             DispatchQueue.main.async {
-                completion(friends)
+//                completion(friends)
+                completion(.success(friends))
             }
         }
     }
 
-    func getPhotos(userId: String, completion: @escaping ([Photo]) -> Void)  {
+    func getPhotos(userId: Int, completion: @escaping (Result<[Photo], NetworkError>) -> Void)  {
 
         let url = baseURL + "/photos.get"
 
         let parameters: Parameters = [
             "owner_id": userId,
             "album_id": "profile",
-            "extended": 1,
+            "extended": 0,
             "count": 25,
             "access_token": Session.shared.token,
             "v": "5.131"
@@ -62,7 +67,7 @@ final class APIService {
         AF.request(url, method: .get, parameters: parameters).responseData { response in
 
             guard let data = response.data else {
-                return
+                return completion(.failure(.default))
             }
 
             let photoResponse = try? JSONDecoder().decode(PhotoResponse.self, from: data)
@@ -72,12 +77,12 @@ final class APIService {
             }
 
             DispatchQueue.main.async {
-                completion(photos)
+                completion(.success(photos))
             }
         }
     }
 
-    func getGroups(completion: @escaping ([Group]) -> Void) {
+    func getGroups(completion: @escaping (Result<[Group], NetworkError>) -> Void) {
 
         let url = baseURL + "/groups.get"
 
@@ -92,7 +97,7 @@ final class APIService {
         AF.request(url, method: .get, parameters: parameters).responseData { response in
 
             guard let data = response.data else {
-                return
+                return completion(.failure(.default))
             }
 
             let groupsResponse = try? JSONDecoder().decode(GroupsResponse.self, from: data)
@@ -102,7 +107,7 @@ final class APIService {
             }
 
             DispatchQueue.main.async {
-                completion(groups)
+                completion(.success(groups))
             }
         }
     }

@@ -11,8 +11,11 @@ import RealmSwift
 class FriendGalleryViewController: UIViewController {
 
     private let apiService = APIService()
-    var photos = [Photo]()
-    var userId = 0
+    var photos: Results<Photo>?
+    var user: User?
+
+    let realm = RealmManager.shared
+    var token: NotificationToken?
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -26,6 +29,7 @@ class FriendGalleryViewController: UIViewController {
     }()
 
     override func viewDidLoad() {
+
         super.viewDidLoad()
         collectionView.backgroundColor = .white
 
@@ -39,11 +43,74 @@ class FriendGalleryViewController: UIViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
+        loadFromCache()
+        subscribe()
+        loadData()
+    }
 
-        apiService.getPhotos(userId: "\(userId)") { photos in
-            self.photos = photos
-            self.collectionView.reloadData()
-            self.savePhotosData(photos)
+    private func loadFromCache() {
+        guard let userID = user?.id else {
+            return
+        }
+
+        photos = realm?.getObjects(type: Photo.self).filter("owner_id == \(userID)")
+        collectionView.reloadData()
+    }
+
+    private func subscribe() {
+        guard let userID = user?.id else {
+            return
+        }
+
+        photos = realm?.getObjects(type: Photo.self).filter("owner_id == \(userID)")
+
+        token = photos?.observe { [weak self] changes in
+
+            guard let self = self else {
+                return
+            }
+
+            switch changes {
+            case .initial:
+                self.collectionView.reloadData()
+
+            case .update(_,
+                         let deletions,
+                         let insertions,
+                         let modifications):
+                let deletionsIndexPath = deletions.map { IndexPath(row: $0, section: 0) }
+                let insertionsIndexPath = insertions.map { IndexPath(row: $0, section: 0) }
+                let modificationsIndexPath = modifications.map { IndexPath(row: $0, section: 0) }
+
+                DispatchQueue.main.async {
+                    self.collectionView.performBatchUpdates {
+                        self.collectionView.insertItems(at: insertionsIndexPath)
+                        self.collectionView.deleteItems(at: deletionsIndexPath)
+                        self.collectionView.reloadItems(at: modificationsIndexPath)
+                    }
+                }
+
+            case .error(let error):
+                print("\(error)")
+            }
+        }
+    }
+
+    private func loadData() {
+        guard let userID = user?.id else {
+            return
+        }
+
+        apiService.getPhotos(userId: userID) { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            switch result {
+            case .success(let photos):
+                self.savePhotosData(photos)
+            case .failure:
+                break
+            }
         }
     }
 
@@ -51,7 +118,8 @@ class FriendGalleryViewController: UIViewController {
         do {
             let realm = try Realm()
             realm.beginWrite()
-            realm.add(photos)
+            realm.add(photos, update: .modified)
+            user?.photos.append(objectsIn: photos)
             try realm.commitWrite()
         } catch {
             print("Error")
@@ -61,13 +129,12 @@ class FriendGalleryViewController: UIViewController {
 
 extension FriendGalleryViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return photos.count
+        return photos?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GalleryCell", for: indexPath) as! GalleryCell
-
-        cell.photo = photos[indexPath.row]
+        cell.photo = photos?[indexPath.row]
         return cell
     }
 }
