@@ -9,6 +9,18 @@ import UIKit
 
 final class NewsfeedFooterCell: UITableViewCell {
 
+    var viewModel: NewsfeedFooterCellViewModel? {
+        didSet {
+            guard let viewModel = viewModel else {
+                return
+            }
+            likeButton.setTitle(viewModel.likesCount, for: .normal)
+            commentButton.setTitle(viewModel.commentsCount, for: .normal)
+            shareButton.setTitle(viewModel.sharesCount, for: .normal)
+            viewsButton.setTitle(viewModel.viewsCount, for: .normal)
+        }
+    }
+
     private let stackView = UIStackView()
     private let likeButton = UIButton()
     private let commentButton = UIButton()
@@ -29,6 +41,7 @@ final class NewsfeedFooterCell: UITableViewCell {
         stackView.distribution = .fillEqually
         stackView.spacing = 10
         addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
             stackView.heightAnchor.constraint(equalToConstant: 20)
@@ -45,6 +58,7 @@ final class NewsfeedFooterCell: UITableViewCell {
 
         viewsButton.setImage(UIImage(named: "eye.fill"), for: .normal)
         addSubview(viewsButton)
+        viewsButton.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             viewsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
             viewsButton.heightAnchor.constraint(equalToConstant: 20)

@@ -8,19 +8,24 @@
 import UIKit
 
 struct NewsfeedHeaderCellViewModel {
-
+    let title: String
+    let photo: String
+    let date: String
 }
 
 struct NewsfeedTextCellViewModel {
-
+    let text: String
 }
 
 struct NewsfeedPhotoCellViewModel {
-
+    let imageURL: String
 }
 
 struct NewsfeedFooterCellViewModel {
-
+    let likesCount: String
+    let commentsCount: String
+    let sharesCount: String
+    let viewsCount: String
 }
 
 enum NewsfeedCellViewModel {
@@ -40,10 +45,10 @@ final class NewsfeedViewController: UIViewController {
 
     private let presenter = NewsfeedPresenter()
 
-    var sections: [NewsfeedSection] = []
-
     override func viewDidLoad() {
         super.viewDidLoad()
+        presenter.view = self
+
         setupViews()
 
         tableView.register(NewsfeedHeaderCell.self, forCellReuseIdentifier: "NewsfeedHeaderCell")
@@ -71,30 +76,49 @@ final class NewsfeedViewController: UIViewController {
 extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
 
     func numberOfSections(in tableView: UITableView) -> Int {
-        sections.count
+        presenter.sections.count
     }
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        sections[section].items.count
+        presenter.sections[section].items.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 
-//        let item = sections[indexPath.section].items[indexPath.row]
-//
-//        switch item {
-//        case .header(let viewModel):
-//            guard let cell = tableView.dequeueReusableCell(withIdentifier: "HeaderCell", for: indexPath) as? HeaderCell else {
-//                return UITableViewCell()
-//            }
-//            cell.viewModel = viewModel
-//            return cell
-//        case .text(let viewModel):
-//        case .photo(let viewModel):
-//        case .footer(let viewModel):
-//        }
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "HeaderCell", for: indexPath)
+        let item = presenter.sections[indexPath.section].items[indexPath.row]
 
-        return UITableViewCell()
+        switch item {
+        case .header(let viewModel):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsfeedHeaderCell", for: indexPath) as? NewsfeedHeaderCell else {
+                return UITableViewCell()
+            }
+            cell.viewModel = viewModel
+            return cell
+        case .text(let viewModel):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsfeedTextCell", for: indexPath) as? NewsfeedTextCell else {
+                return UITableViewCell()
+            }
+            cell.viewModel = viewModel
+            return cell
+        case .photo(let viewModel):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsfeedPhotoCell", for: indexPath) as? NewsfeedPhotoCell else {
+                return UITableViewCell()
+            }
+            cell.viewModel = viewModel
+            return cell
+        case .footer(let viewModel):
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsfeedFooterCell", for: indexPath) as? NewsfeedFooterCell else {
+                return UITableViewCell()
+            }
+            cell.viewModel = viewModel
+            return cell
+        }
+    }
+}
+
+extension NewsfeedViewController: NewsfeedViewProtocol {
+
+    func update() {
+        self.tableView.reloadData()
     }
 }

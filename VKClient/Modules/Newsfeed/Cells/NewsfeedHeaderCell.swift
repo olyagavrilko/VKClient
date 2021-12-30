@@ -9,7 +9,18 @@ import UIKit
 
 final class NewsfeedHeaderCell: UITableViewCell {
 
-    private let photoImageView = UIImageView()
+    var viewModel: NewsfeedHeaderCellViewModel? {
+        didSet {
+            guard let viewModel = viewModel else {
+                return
+            }
+            photoImageView.load(viewModel.photo)
+            titleLabel.text = viewModel.title
+            subtitleLabel.text = viewModel.date
+        }
+    }
+
+    private let photoImageView = CachedImageView()
     private let titleLabel = UILabel()
     private let subtitleLabel = UILabel()
 

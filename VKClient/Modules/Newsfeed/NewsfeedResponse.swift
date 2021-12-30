@@ -35,35 +35,46 @@ struct NewsItem: Decodable {
         let count: Int
     }
 
-    enum Attachment: Decodable {
-        case photo(Photo)
-
-        enum CodingKeys: String, CodingKey {
-            case type
-            case photo
-        }
-
-        enum AttachmentType: String {
-            case photo
-        }
-
-        init(from decoder: Decoder) throws {
-            let container = try decoder.container(keyedBy: CodingKeys.self)
-            let typeString = try container.decode(String.self, forKey: .type)
-
-            guard let type = AttachmentType(rawValue: typeString) else {
-                throw NetworkError.default
-            }
-
-            switch type {
-            case .photo:
-                let photo = try container.decode(Photo.self, forKey: .photo)
-                self = .photo(photo)
-            }
-        }
+    struct Attachment: Decodable {
+        let photo: Photo?
     }
 
-    let source_id: Int
+//    enum Attachment: Decodable, Equatable {
+//        case photo(Photo)
+//
+//        enum CodingKeys: String, CodingKey {
+//            case type
+//            case photo
+//        }
+//
+//        enum AttachmentType: String {
+//            case photo
+//        }
+//
+//        var type: AttachmentType {
+//            switch self {
+//            case .photo:
+//                return .photo
+//            }
+//        }
+//
+//        init(from decoder: Decoder) throws {
+//            let container = try decoder.container(keyedBy: CodingKeys.self)
+//            let typeString = try container.decode(String.self, forKey: .type)
+//
+//            guard let type = AttachmentType(rawValue: typeString) else {
+//                throw NetworkError.default
+//            }
+//
+//            switch type {
+//            case .photo:
+//                let photo = try container.decode(Photo.self, forKey: .photo)
+//                self = .photo(photo)
+//            }
+//        }
+//    }
+
+    let sourceId: Int
     let date: Int
     let text: String
     let comments: Comments
@@ -71,14 +82,29 @@ struct NewsItem: Decodable {
     let reposts: Reposts
     let views: Views
     let attachments: [Attachment]
+
+    enum CodingKeys: String, CodingKey {
+        case sourceId = "source_id"
+        case date
+        case text
+        case comments
+        case likes
+        case reposts
+        case views
+        case attachments
+    }
 }
 
 struct Profile: Decodable {
     let id: Int
     let photo100: String
+    let firstName: String
+    let lastName: String
 
     enum CodingKeys: String, CodingKey {
         case id
         case photo100 = "photo_100"
+        case firstName = "first_name"
+        case lastName = "last_name"
     }
 }

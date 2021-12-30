@@ -14,7 +14,7 @@ final class NewsfeedNetworkService {
     private let clientID = Session.shared.userId
     private let version = "5.131"
 
-    func fetchNews(completion: @escaping (Result<[NewsItem], NetworkError>) -> Void) {
+    func fetchNews(completion: @escaping (Result<NewsfeedResponse, NetworkError>) -> Void) {
 
         let url = baseURL + "/newsfeed.get"
 
@@ -22,6 +22,7 @@ final class NewsfeedNetworkService {
 
         components.queryItems = [
             URLQueryItem(name: "filters", value: "post, photo"),
+            URLQueryItem(name: "source_ids", value: "groups, pages"),
             URLQueryItem(name: "count", value: "5"),
             URLQueryItem(name: "access_token", value: Session.shared.token),
             URLQueryItem(name: "v", value: "5.131"),
@@ -30,22 +31,14 @@ final class NewsfeedNetworkService {
         let task = URLSession.shared.dataTask(with: components.url!) { data, response, error in
 
             guard let data = data else {
-                completion(.failure(.default))
-                return
+                return completion(.failure(.default))
             }
 
-            let newsfeedResponse: NewsfeedResponse?
-            do {
-                newsfeedResponse = try JSONDecoder().decode(NewsfeedResponse.self, from: data)
-            } catch(let error) {
-                newsfeedResponse = nil
+            guard let newsfeedResponse = try? JSONDecoder().decode(NewsfeedResponse.self, from: data) else {
+                return completion(.failure(.default))
             }
 
-            guard let newsfeed = newsfeedResponse?.response.items else {
-                return
-            }
-            completion(.success(newsfeed))
-            print("NEWSFEED", newsfeed)
+            completion(.success(newsfeedResponse))
         }
         task.resume()
     }
