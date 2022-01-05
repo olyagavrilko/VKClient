@@ -14,42 +14,10 @@ enum NetworkError: Error {
 
 final class APIService {
 
-    private let baseURL = "https://api.vk.com/method"
-    private let token = Session.shared.token
-    private let clientID = Session.shared.userId
+    let baseURL = "https://api.vk.com/method"
+    let token = Session.shared.token
+    let clientID = Session.shared.userId
     private let version = "5.131"
-
-    func getFriends(completion: @escaping (Result<[User], NetworkError>) -> Void) {
-
-        let url = baseURL + "/friends.get"
-
-        let parameters: Parameters = [
-            "user_id": clientID,
-            "order": "name",
-            "count": 50,
-            "fields": "city, photo_100",
-            "access_token": Session.shared.token,
-            "v": version
-        ]
-
-        AF.request(url, method: .get, parameters: parameters).responseData { response in
-
-            guard let data = response.data else {
-                return completion(.failure(.default))
-            }
-
-            let friendsResponse = try? JSONDecoder().decode(UsersResponse.self, from: data)
-
-            guard let friends = friendsResponse?.response.items else {
-                return
-            }
-
-            DispatchQueue.main.async {
-//                completion(friends)
-                completion(.success(friends))
-            }
-        }
-    }
 
     func getPhotos(userId: Int, completion: @escaping (Result<[Photo], NetworkError>) -> Void)  {
 
@@ -202,42 +170,101 @@ final class APIService {
     }
 }
 
-//    func getFriends(completion: ([User]) -> ()) {
-//
-//        let url = baseURL + "/friends.get"
-//
-//        let parameters: Parameters = [
-//            "user_id": clientID,
-//            "order": "name",
-//            "count": 50,
-//            "fields": "city, photo_100",
-//            "access_token": Session.shared.token,
-//            "v": version
-//        ]
-//
-//        AF.request(url, method: .get, parameters: parameters).responseData { response in
-//
-//            guard let data = response.data else {
-//                return
-//            }
-//            print(data.prettyJSON as Any)
-//
-//            guard let json = try? JSONSerialization.jsonObject(with: data, options: .mutableContainers) else {
-//                return
-//            }
-//
-//            let object = json as! [String: Any]
-//            let response = object["response"] as! [String: Any]
-//            let items = response["items"] as! [Any]
-//
-//            for userJson in items {
-//                let userJson = userJson as! [String: Any]
-//                let id = userJson["id"] as! Int
-//                let lastName = userJson["last_name"] as! String
-//                let city = userJson["city"] as! [String: Any]
-//                let cityTitle = city["title"] as! String
-//                let firstName = userJson["first_name"] as! String
-//            }
-//        }
-//        completion([])
-//    }
+final class FetchDataOperation: AsyncOperation {
+
+    private let url: String
+    private let method: HTTPMethod
+    private let parameters: Parameters
+
+    private lazy var request = AF.request(url, method: method, parameters: parameters)
+
+    var data: Data?
+
+    init(url: String, method: HTTPMethod, parameters: Parameters) {
+        self.url = url
+        self.method = method
+        self.parameters = parameters
+        super.init()
+    }
+
+    override func main() {
+        request.responseData(queue: DispatchQueue.global()) { [weak self] response in
+            self?.data = response.data
+            self?.state = .finished
+        }
+    }
+
+    override func cancel() {
+        request.cancel()
+        super.cancel()
+    }
+}
+
+final class ParseDataOperation<T: Decodable>: Operation {
+
+    private let data: Data
+    var model: T?
+
+    init(data: Data) {
+        self.data = data
+        super.init()
+    }
+
+    override func main() {
+        model = try? JSONDecoder().decode(T.self, from: data)
+    }
+}
+
+class AsyncOperation: Operation {
+
+    enum State: String {
+        case ready
+        case executing
+        case finished
+
+        fileprivate var keyPath: String {
+            return "is" + rawValue.capitalized
+        }
+    }
+
+    var state = State.ready {
+        willSet {
+            willChangeValue(forKey: state.keyPath)
+            willChangeValue(forKey: newValue.keyPath)
+        }
+        didSet {
+            didChangeValue(forKey: state.keyPath)
+            didChangeValue(forKey: oldValue.keyPath)
+        }
+    }
+
+    override var isAsynchronous: Bool {
+        return true
+    }
+
+    override var isReady: Bool {
+        return super.isReady && state == .ready
+    }
+
+    override var isExecuting: Bool {
+        return state == .executing
+    }
+
+    override var isFinished: Bool {
+        return state == .finished
+    }
+
+    override func start() {
+        if isCancelled {
+            state = .finished
+        } else {
+            main()
+            state = .executing
+        }
+    }
+
+    override func cancel() {
+        super.cancel()
+        state = .finished
+    }
+}
