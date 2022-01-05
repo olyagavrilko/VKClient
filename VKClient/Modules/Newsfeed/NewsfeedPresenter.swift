@@ -36,11 +36,14 @@ final class NewsfeedPresenter {
                 self.groups = result.response.groups
                 self.profiles = result.response.profiles
 
-                self.sections = self.makeSections(using: self.news, using: self.groups, using: self.profiles)
-
-                DispatchQueue.main.async {
-                    self.view?.update()
+                DispatchQueue.global().async {
+                    self.sections = self.makeSections(using: self.news, using: self.groups, using: self.profiles)
+                    
+                    DispatchQueue.main.async {
+                        self.view?.update()
+                    }
                 }
+
             case .failure:
                 break
             }
