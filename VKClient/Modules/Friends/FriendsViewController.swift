@@ -7,8 +7,11 @@
 
 import UIKit
 import RealmSwift
+import Alamofire
 
 final class FriendsViewController: UIViewController {
+
+    private let myQueue = OperationQueue()
 
     private let tableView = UITableView()
     private let apiService = APIService()
@@ -66,25 +69,32 @@ final class FriendsViewController: UIViewController {
     }
 
     private func loadData() {
-        apiService.getFriends { result in
-            switch result {
-            case .success(let users):
-                self.saveFriendsData(users)
-            case .failure:
-                break
-            }
-        }
-    }
+        
+        let url = apiService.baseURL + "/friends.get"
 
-    private func saveFriendsData(_ friends: [User]) {
-        do {
-            let realm = try Realm()
-            print(realm.configuration.fileURL)
-            realm.beginWrite()
-            realm.add(friends, update: .modified)
-            try realm.commitWrite()
-        } catch {
-            print("Error")
+        let parameters: Parameters = [
+            "user_id": apiService.clientID,
+            "order": "name",
+            "count": 50,
+            "fields": "city, photo_100",
+            "access_token": Session.shared.token,
+            "v": "5.131"
+        ]
+
+        let fetchDataOperation = FetchDataOperation(url: url, method: .get, parameters: parameters)
+        fetchDataOperation.completionBlock = {
+            guard let data = fetchDataOperation.data else {
+                return
+            }
+
+            let parseDataOperation = ParseDataOperation<UsersResponse>(data: data)
+            parseDataOperation.completionBlock = {
+                guard let friends = parseDataOperation.model?.response.items else {
+                    return
+                }
+
+                let saveDataToDBOperation = SaveDataToDBOperation(data: friends)
+            }
         }
     }
 
