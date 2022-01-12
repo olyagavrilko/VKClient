@@ -62,3 +62,24 @@ final class RealmManager {
         }
     }
 }
+
+final class SaveDataToDBOperation<S>: Operation where S: Sequence, S.Element: Object {
+
+    let data: S
+
+    init(data: S) {
+        self.data = data
+        super.init()
+    }
+
+    override func main() {
+        do {
+            let realm = try Realm()
+            realm.beginWrite()
+            realm.add(data, update: .modified)
+            try realm.commitWrite()
+        } catch {
+            print("Error")
+        }
+    }
+}
