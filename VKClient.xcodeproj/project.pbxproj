@@ -20,9 +20,6 @@
 		193F257627620CF60080725B /* RealmManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193F257527620CF60080725B /* RealmManager.swift */; };
 		195D6BA727453353008AC4C4 /* GroupSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 195D6BA627453353008AC4C4 /* GroupSearchViewController.swift */; };
 		199024A826837A98004F5527 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 199024A726837A98004F5527 /* AuthorizationViewController.swift */; };
-		19909F452776086500C463B3 /* NewsfeedPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19909F442776086500C463B3 /* NewsfeedPresenter.swift */; };
-		19909F4A2776088A00C463B3 /* NewsfeedNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19909F492776088A00C463B3 /* NewsfeedNetworkService.swift */; };
-		19909F5027760E1F00C463B3 /* NewsfeedResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19909F4F27760E1F00C463B3 /* NewsfeedResponse.swift */; };
 		19A1BD6626A1A3E100154416 /* MyGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1BD6526A1A3E100154416 /* MyGroupsViewController.swift */; };
 		19A1BD6E26A1A40E00154416 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1BD6D26A1A40E00154416 /* GroupCell.swift */; };
 		19A1BD7426A1A59900154416 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1BD7326A1A59900154416 /* Group.swift */; };
@@ -37,11 +34,6 @@
 		19E65BAB2763D81700400B30 /* Results+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E65BAA2763D81700400B30 /* Results+Extension.swift */; };
 		19E65BCC276916F700400B30 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 19E65BCB276916F700400B30 /* GoogleService-Info.plist */; };
 		19E65BD12769277800400B30 /* FirebaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E65BD02769277800400B30 /* FirebaseModel.swift */; };
-		19E65BD72774C4F000400B30 /* NewsfeedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E65BD62774C4F000400B30 /* NewsfeedViewController.swift */; };
-		19E65BDD2774CAE300400B30 /* NewsfeedHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E65BDC2774CAE300400B30 /* NewsfeedHeaderCell.swift */; };
-		19E65BE52774CAF200400B30 /* NewsfeedTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E65BE42774CAF200400B30 /* NewsfeedTextCell.swift */; };
-		19E65BEA2774CB0100400B30 /* NewsfeedPhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E65BE92774CB0100400B30 /* NewsfeedPhotoCell.swift */; };
-		19E65BEF2774CB1100400B30 /* NewsfeedFooterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E65BEE2774CB1100400B30 /* NewsfeedFooterCell.swift */; };
 		1AB32AD497C89DB7BEE0B1F3 /* Pods_VKClient.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7571D9D0C3E3F700D237D82 /* Pods_VKClient.framework */; };
 		3E67BC1CEFFCDBD15D144B58 /* Pods_VKClient_VKClientUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7EABA4473A14EAD914DD51F /* Pods_VKClient_VKClientUITests.framework */; };
 /* End PBXBuildFile section */
@@ -82,9 +74,6 @@
 		193F257527620CF60080725B /* RealmManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmManager.swift; sourceTree = "<group>"; };
 		195D6BA627453353008AC4C4 /* GroupSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupSearchViewController.swift; sourceTree = "<group>"; };
 		199024A726837A98004F5527 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
-		19909F442776086500C463B3 /* NewsfeedPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedPresenter.swift; sourceTree = "<group>"; };
-		19909F492776088A00C463B3 /* NewsfeedNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedNetworkService.swift; sourceTree = "<group>"; };
-		19909F4F27760E1F00C463B3 /* NewsfeedResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedResponse.swift; sourceTree = "<group>"; };
 		19A1BD6526A1A3E100154416 /* MyGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsViewController.swift; sourceTree = "<group>"; };
 		19A1BD6D26A1A40E00154416 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
 		19A1BD7326A1A59900154416 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
@@ -99,11 +88,6 @@
 		19E65BAA2763D81700400B30 /* Results+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Results+Extension.swift"; sourceTree = "<group>"; };
 		19E65BCB276916F700400B30 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		19E65BD02769277800400B30 /* FirebaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseModel.swift; sourceTree = "<group>"; };
-		19E65BD62774C4F000400B30 /* NewsfeedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedViewController.swift; sourceTree = "<group>"; };
-		19E65BDC2774CAE300400B30 /* NewsfeedHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedHeaderCell.swift; sourceTree = "<group>"; };
-		19E65BE42774CAF200400B30 /* NewsfeedTextCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedTextCell.swift; sourceTree = "<group>"; };
-		19E65BE92774CB0100400B30 /* NewsfeedPhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedPhotoCell.swift; sourceTree = "<group>"; };
-		19E65BEE2774CB1100400B30 /* NewsfeedFooterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsfeedFooterCell.swift; sourceTree = "<group>"; };
 		1ACC24D82AEC2136C965F459 /* Pods-VKClientTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKClientTests.debug.xcconfig"; path = "Target Support Files/Pods-VKClientTests/Pods-VKClientTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3CAD2E06703AB4F1C103388A /* Pods-VKClientTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VKClientTests.release.xcconfig"; path = "Target Support Files/Pods-VKClientTests/Pods-VKClientTests.release.xcconfig"; sourceTree = "<group>"; };
 		6843882FE475C46042EC0938 /* Pods_VKClientTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VKClientTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,12 +190,12 @@
 			path = VKClientUITests;
 			sourceTree = "<group>";
 		};
-		195D6BA527453320008AC4C4 /* GroupSearch */ = {
+		195D6BA527453320008AC4C4 /*  GroupSearch */ = {
 			isa = PBXGroup;
 			children = (
 				195D6BA627453353008AC4C4 /* GroupSearchViewController.swift */,
 			);
-			path = GroupSearch;
+			path = " GroupSearch";
 			sourceTree = "<group>";
 		};
 		1990249726836FB7004F5527 /* Services */ = {
@@ -250,8 +234,7 @@
 				1990249826836FD3004F5527 /* Friends */,
 				19CA754926971AB400F15FB7 /* FriendGallery */,
 				19A1BD6426A1A37B00154416 /* MyGroups */,
-				195D6BA527453320008AC4C4 /* GroupSearch */,
-				19E65BD52774C46200400B30 /* Newsfeed */,
+				195D6BA527453320008AC4C4 /*  GroupSearch */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -318,29 +301,6 @@
 				19CA75712698C55400F15FB7 /* Photo.swift */,
 			);
 			path = Models;
-			sourceTree = "<group>";
-		};
-		19E65BD52774C46200400B30 /* Newsfeed */ = {
-			isa = PBXGroup;
-			children = (
-				19E65BDB2774CABD00400B30 /* Cells */,
-				19E65BD62774C4F000400B30 /* NewsfeedViewController.swift */,
-				19909F442776086500C463B3 /* NewsfeedPresenter.swift */,
-				19909F492776088A00C463B3 /* NewsfeedNetworkService.swift */,
-				19909F4F27760E1F00C463B3 /* NewsfeedResponse.swift */,
-			);
-			path = Newsfeed;
-			sourceTree = "<group>";
-		};
-		19E65BDB2774CABD00400B30 /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				19E65BDC2774CAE300400B30 /* NewsfeedHeaderCell.swift */,
-				19E65BE42774CAF200400B30 /* NewsfeedTextCell.swift */,
-				19E65BE92774CB0100400B30 /* NewsfeedPhotoCell.swift */,
-				19E65BEE2774CB1100400B30 /* NewsfeedFooterCell.swift */,
-			);
-			path = Cells;
 			sourceTree = "<group>";
 		};
 		BDDFFA38DCDFFEBDD19318D5 /* Pods */ = {
@@ -605,22 +565,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				193048692682143500A3AF0B /* FriendsViewController.swift in Sources */,
-				19E65BEA2774CB0100400B30 /* NewsfeedPhotoCell.swift in Sources */,
-				19E65BD72774C4F000400B30 /* NewsfeedViewController.swift in Sources */,
-				19909F452776086500C463B3 /* NewsfeedPresenter.swift in Sources */,
 				19A1BD7426A1A59900154416 /* Group.swift in Sources */,
 				19CA7566269859A100F15FB7 /* TabBarViewController.swift in Sources */,
 				19C99000268274C300390736 /* Session.swift in Sources */,
-				19909F5027760E1F00C463B3 /* NewsfeedResponse.swift in Sources */,
-				19E65BEF2774CB1100400B30 /* NewsfeedFooterCell.swift in Sources */,
 				19E65BAB2763D81700400B30 /* Results+Extension.swift in Sources */,
 				195D6BA727453353008AC4C4 /* GroupSearchViewController.swift in Sources */,
-				19E65BDD2774CAE300400B30 /* NewsfeedHeaderCell.swift in Sources */,
 				19E65BD12769277800400B30 /* FirebaseModel.swift in Sources */,
 				191B4128268CC4030066047B /* APIServise.swift in Sources */,
 				19CA75592697922400F15FB7 /* Friends.swift in Sources */,
 				19CA754426960B9800F15FB7 /* FriendCell.swift in Sources */,
-				19909F4A2776088A00C463B3 /* NewsfeedNetworkService.swift in Sources */,
 				19CA75722698C55400F15FB7 /* Photo.swift in Sources */,
 				19A1BD6E26A1A40E00154416 /* GroupCell.swift in Sources */,
 				1930486F2682143500A3AF0B /* VKClient.xcdatamodeld in Sources */,
@@ -631,7 +584,6 @@
 				19CA755026971B4200F15FB7 /* GalleryCell.swift in Sources */,
 				199024A826837A98004F5527 /* AuthorizationViewController.swift in Sources */,
 				19CA754B26971AF900F15FB7 /* FriendGalleryViewController.swift in Sources */,
-				19E65BE52774CAF200400B30 /* NewsfeedTextCell.swift in Sources */,
 				191B4138268E05FE0066047B /* Data + PrettyJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

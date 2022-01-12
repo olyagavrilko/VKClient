@@ -21,8 +21,7 @@ class TabBarViewController: UITabBarController {
     private func setupVCs() {
         viewControllers = [
             createNavController(for: FriendsViewController(), title: "Друзья", image: UIImage.init(systemName: "person.2")!),
-            createNavController(for: MyGroupsViewController(), title: "Сообщества", image: UIImage.init(systemName: "person.3")!),
-            createNavController(for: NewsfeedViewController(), title: "Новости", image: UIImage.init(systemName: "newspaper")!)
+            createNavController(for: MyGroupsViewController(), title: "Сообщества", image: UIImage.init(systemName: "person.3")!)
         ]
     }
     
