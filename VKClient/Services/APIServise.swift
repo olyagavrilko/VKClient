@@ -9,6 +9,10 @@ import Alamofire
 import Foundation
 
 enum NetworkError: Error {
+    case noDataProvided
+    case failedToDecode
+    case errorTask
+    case notCorrectUrl
     case `default`
 }
 

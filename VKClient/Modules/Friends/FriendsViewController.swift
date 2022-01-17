@@ -8,6 +8,7 @@
 import UIKit
 import RealmSwift
 import Alamofire
+import PromiseKit
 
 final class FriendsViewController: UIViewController {
 
@@ -29,9 +30,34 @@ final class FriendsViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
 
+        fetchFriends()
+            .then(parse(_:))
+            .done(on: DispatchQueue.main) { friends in
+                do {
+                    let realm = try Realm()
+                    realm.beginWrite()
+                    realm.add(friends, update: .modified)
+                    try realm.commitWrite()
+                } catch {
+                    print("Error")
+                }
+            }.catch { error in
+                print(error)
+            }
+
         loadFromCache()
         subscribe()
-        loadData()
+    }
+
+    private func setupViews() {
+        view.addSubview(tableView)
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     private func loadFromCache() {
@@ -68,8 +94,7 @@ final class FriendsViewController: UIViewController {
         }
     }
 
-    private func loadData() {
-        
+    private func fetchFriends() -> Promise<Data> {
         let url = apiService.baseURL + "/friends.get"
 
         let parameters: Parameters = [
@@ -81,32 +106,27 @@ final class FriendsViewController: UIViewController {
             "v": "5.131"
         ]
 
-        let fetchDataOperation = FetchDataOperation(url: url, method: .get, parameters: parameters)
-        fetchDataOperation.completionBlock = {
-            guard let data = fetchDataOperation.data else {
-                return
-            }
+        return Promise { resolver in
+            AF.request(url, method: .get, parameters: parameters).responseData(queue: DispatchQueue.global()) { response in
 
-            let parseDataOperation = ParseDataOperation<UsersResponse>(data: data)
-            parseDataOperation.completionBlock = {
-                guard let friends = parseDataOperation.model?.response.items else {
+                guard let data = response.data else {
+                    resolver.reject(NetworkError.errorTask)
                     return
                 }
-
-                let saveDataToDBOperation = SaveDataToDBOperation(data: friends)
+                resolver.fulfill(data)
             }
         }
     }
 
-    private func setupViews() {
-        view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+    private func parse(_ data: Data) -> Promise<[User]> {
+        return Promise { resolver in
+            do {
+                let response = try JSONDecoder().decode(UsersResponse.self, from: data).response
+                resolver.fulfill(response.items)
+            } catch {
+                resolver.reject(NetworkError.failedToDecode)
+            }
+        }
     }
 }
 

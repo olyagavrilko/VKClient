@@ -10,6 +10,7 @@ target 'VKClient' do
   pod 'RealmSwift'
   pod 'Firebase/Auth'
   pod 'Firebase/Database'
+  pod "PromiseKit", "~> 6.8"
 
   target 'VKClientTests' do
     inherit! :search_paths
