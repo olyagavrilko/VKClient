@@ -9,6 +9,7 @@ import Foundation
 
 protocol NewsfeedViewProtocol: AnyObject {
     func update()
+    func endRefreshing()
 }
 
 final class NewsfeedPresenter {
@@ -18,6 +19,8 @@ final class NewsfeedPresenter {
     var news: [NewsItem] = []
     var groups: [Group] = []
     var profiles: [Profile] = []
+
+    var latestLoadDate: Int?
 
     private let networkService = NewsfeedNetworkService()
 
@@ -36,6 +39,12 @@ final class NewsfeedPresenter {
                 self.groups = result.response.groups
                 self.profiles = result.response.profiles
 
+                if let latestLoadDate = self.news.first?.date {
+                    self.latestLoadDate = latestLoadDate + 1
+                } else {
+                    self.latestLoadDate = nil
+                }
+
                 DispatchQueue.global().async {
                     self.sections = self.makeSections(using: self.news, using: self.groups, using: self.profiles)
                     
@@ -47,6 +56,48 @@ final class NewsfeedPresenter {
             case .failure:
                 break
             }
+        }
+    }
+
+    func loadData(from time: Int) {
+        networkService.fetchNewsWithTime(TimeInterval(time)) { [weak self] result in
+            switch result {
+            case .success(let result):
+
+                guard let self = self else {
+                    return
+                }
+
+                self.news.insert(contentsOf: result.response.items, at: 0)
+                self.groups.insert(contentsOf: result.response.groups, at: 0)
+                self.profiles.insert(contentsOf: result.response.profiles, at: 0)
+
+                if let latestLoadDate = self.news.first?.date {
+                    self.latestLoadDate = latestLoadDate + 1
+                } else {
+                    self.latestLoadDate = nil
+                }
+
+                DispatchQueue.global().async {
+                    self.sections = self.makeSections(using: self.news, using: self.groups, using: self.profiles)
+
+                    DispatchQueue.main.async {
+                        self.view?.endRefreshing()
+                        self.view?.update()
+                    }
+                }
+
+            case .failure:
+                break
+            }
+        }
+    }
+
+    func refreshNews() {
+        if let latestLoadDate = latestLoadDate {
+            loadData(from: latestLoadDate)
+        } else {
+            loadData()
         }
     }
 

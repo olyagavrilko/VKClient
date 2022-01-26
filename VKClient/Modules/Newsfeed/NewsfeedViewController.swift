@@ -41,7 +41,7 @@ struct NewsfeedSection {
 
 final class NewsfeedViewController: UIViewController {
 
-    private let tableView = UITableView()
+    private let tableView = UITableView(frame: .zero, style: .grouped)
 
     private let presenter = NewsfeedPresenter()
 
@@ -50,6 +50,7 @@ final class NewsfeedViewController: UIViewController {
         presenter.view = self
 
         setupViews()
+        setupRefreshControl()
 
         tableView.register(NewsfeedHeaderCell.self, forCellReuseIdentifier: "NewsfeedHeaderCell")
         tableView.register(NewsfeedTextCell.self, forCellReuseIdentifier: "NewsfeedTextCell")
@@ -62,6 +63,7 @@ final class NewsfeedViewController: UIViewController {
     }
 
     private func setupViews() {
+        tableView.separatorStyle = .none
         view.addSubview(tableView)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -70,6 +72,17 @@ final class NewsfeedViewController: UIViewController {
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
+
+    private func setupRefreshControl() {
+        tableView.refreshControl = UIRefreshControl()
+
+        tableView.refreshControl?.attributedTitle = NSAttributedString(string: "Обновление...")
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshNews), for: .valueChanged)
+    }
+
+    @objc private func refreshNews() {
+        presenter.refreshNews()
     }
 }
 
@@ -120,5 +133,9 @@ extension NewsfeedViewController: NewsfeedViewProtocol {
 
     func update() {
         self.tableView.reloadData()
+    }
+
+    func endRefreshing() {
+        tableView.refreshControl?.endRefreshing()
     }
 }
