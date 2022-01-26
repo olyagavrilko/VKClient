@@ -39,41 +39,6 @@ struct NewsItem: Decodable {
         let photo: Photo?
     }
 
-//    enum Attachment: Decodable, Equatable {
-//        case photo(Photo)
-//
-//        enum CodingKeys: String, CodingKey {
-//            case type
-//            case photo
-//        }
-//
-//        enum AttachmentType: String {
-//            case photo
-//        }
-//
-//        var type: AttachmentType {
-//            switch self {
-//            case .photo:
-//                return .photo
-//            }
-//        }
-//
-//        init(from decoder: Decoder) throws {
-//            let container = try decoder.container(keyedBy: CodingKeys.self)
-//            let typeString = try container.decode(String.self, forKey: .type)
-//
-//            guard let type = AttachmentType(rawValue: typeString) else {
-//                throw NetworkError.default
-//            }
-//
-//            switch type {
-//            case .photo:
-//                let photo = try container.decode(Photo.self, forKey: .photo)
-//                self = .photo(photo)
-//            }
-//        }
-//    }
-
     let sourceId: Int
     let date: Int
     let text: String

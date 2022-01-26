@@ -22,9 +22,9 @@ final class NewsfeedFooterCell: UITableViewCell {
     }
 
     private let stackView = UIStackView()
-    private let likeButton = UIButton()
-    private let commentButton = UIButton()
-    private let shareButton = UIButton()
+    private let likeButton = UIButton(type: .system)
+    private let commentButton = UIButton(type: .system)
+    private let shareButton = UIButton(type: .system)
     private let viewsButton = UIButton()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -37,32 +37,48 @@ final class NewsfeedFooterCell: UITableViewCell {
     }
 
     private func setupViews() {
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 10
-        addSubview(stackView)
+        stackView.spacing = 8
+        contentView.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 5),
-            stackView.heightAnchor.constraint(equalToConstant: 20)
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
+            stackView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stackView.heightAnchor.constraint(equalToConstant: 32)
         ])
 
-        likeButton.setImage(UIImage(named: "heart"), for: .normal)
+        setupButton(likeButton, imageSystemName: "heart")
         stackView.addArrangedSubview(likeButton)
 
-        commentButton.setImage(UIImage(named: "bubble.left"), for: .normal)
+        setupButton(commentButton, imageSystemName: "bubble.left")
         stackView.addArrangedSubview(commentButton)
 
-        shareButton.setImage(UIImage(named: "arrowshape.turn.up.right"), for: .normal)
+        setupButton(shareButton, imageSystemName: "arrowshape.turn.up.right")
         stackView.addArrangedSubview(shareButton)
 
-        viewsButton.setImage(UIImage(named: "eye.fill"), for: .normal)
-        addSubview(viewsButton)
-        viewsButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            viewsButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
-            viewsButton.heightAnchor.constraint(equalToConstant: 20)
-        ])
+        let view = UIView()
+        view.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        stackView.addArrangedSubview(view)
+
+        viewsButton.setTitleColor(UIColor(red: 154/255, green: 162/255, blue: 173/255, alpha: 1), for: .normal)
+        viewsButton.tintColor = UIColor(red: 154/255, green: 162/255, blue: 173/255, alpha: 1)
+        viewsButton.titleLabel?.font = .systemFont(ofSize: 14)
+        viewsButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
+        viewsButton.imageView?.contentMode = .scaleAspectFit
+        viewsButton.imageEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+        stackView.addArrangedSubview(viewsButton)
+    }
+
+    private func setupButton(_ button: UIButton, imageSystemName: String) {
+        button.setTitleColor(UIColor(red: 154/255, green: 162/255, blue: 173/255, alpha: 1), for: .normal)
+        button.tintColor = UIColor(red: 154/255, green: 162/255, blue: 173/255, alpha: 1)
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        button.imageEdgeInsets = UIEdgeInsets(top: 4, left: -5, bottom: 4, right: 5)
+        button.titleLabel?.font = .systemFont(ofSize: 16)
+        button.backgroundColor = UIColor(red: 240/255, green: 242/255, blue: 245/255, alpha: 1)
+        button.setImage(UIImage(systemName: imageSystemName), for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.layer.cornerRadius = 16
     }
 }
 

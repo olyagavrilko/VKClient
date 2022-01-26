@@ -32,13 +32,13 @@ final class NewsfeedPhotoCell: UITableViewCell {
     private func setupViews() {
         photoImageView.clipsToBounds = true
         photoImageView.contentMode = .scaleAspectFill
-        addSubview(photoImageView)
+        contentView.addSubview(photoImageView)
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            photoImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            photoImageView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            photoImageView.topAnchor.constraint(equalTo: topAnchor),
-            photoImageView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            photoImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             photoImageView.heightAnchor.constraint(equalToConstant: 160)
         ])
     }

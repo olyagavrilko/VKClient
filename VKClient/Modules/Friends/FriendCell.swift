@@ -50,6 +50,7 @@ class FriendCell: UITableViewCell {
             photoImageView.widthAnchor.constraint(equalToConstant: 50),
             photoImageView.heightAnchor.constraint(equalToConstant: 50)
         ])
+
         titleLabel.font = .systemFont(ofSize: 16)
         addSubview(titleLabel)
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -58,6 +59,7 @@ class FriendCell: UITableViewCell {
             titleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
             titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 16)
         ])
+        
         subtitleLabel.font = .systemFont(ofSize: 14)
         subtitleLabel.textColor = .lightGray
         subtitleLabel.numberOfLines = 0
