@@ -19,6 +19,7 @@ struct NewsfeedTextCellViewModel {
 
 struct NewsfeedPhotoCellViewModel {
     let imageURL: String
+    let aspectRatio: CGFloat
 }
 
 struct NewsfeedFooterCellViewModel {
@@ -126,6 +127,22 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
             }
             cell.viewModel = viewModel
             return cell
+        }
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = presenter.sections[indexPath.section].items[indexPath.row]
+        switch item {
+        case .photo(let viewModel):
+            let width = view.frame.width
+            let height = width * viewModel.aspectRatio
+            return height
+        case .header(_):
+            return UITableView.automaticDimension
+        case .text(_):
+            return UITableView.automaticDimension
+        case .footer(_):
+            return UITableView.automaticDimension
         }
     }
 }

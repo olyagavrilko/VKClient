@@ -47,6 +47,10 @@ struct NewsItem: Decodable {
         let photo: Photo?
     }
 
+    var photo: Photo? {
+        attachments?.first?.photo
+    }
+
     let sourceId: Int
     let date: Int
     let text: String

@@ -163,7 +163,6 @@ final class NewsfeedPresenter {
         }
     }
 
-
     func refreshNews() {
         if let latestLoadTime = latestLoadTime {
             loadData(from: latestLoadTime)
@@ -213,8 +212,9 @@ final class NewsfeedPresenter {
             }
 
             var photo: NewsfeedCellViewModel?
-            if let imageURLString = model.attachments?.first?.photo?.sizes.first?.url {
-                photo = .photo(.init(imageURL: imageURLString))
+            if let imageURLString = model.photo?.url,
+               let imageAspectRatio = model.photo?.aspectRatio {
+                photo = .photo(NewsfeedPhotoCellViewModel(imageURL: imageURLString, aspectRatio: imageAspectRatio))
             }
 
             let footer = NewsfeedCellViewModel.footer(NewsfeedFooterCellViewModel(
