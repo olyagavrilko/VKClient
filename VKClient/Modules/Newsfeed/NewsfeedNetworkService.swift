@@ -23,7 +23,41 @@ final class NewsfeedNetworkService {
         components.queryItems = [
             URLQueryItem(name: "filters", value: "post, photo"),
             URLQueryItem(name: "source_ids", value: "groups, pages"),
-            URLQueryItem(name: "count", value: "20"),
+            URLQueryItem(name: "count", value: "5"),
+            URLQueryItem(name: "access_token", value: Session.shared.token),
+            URLQueryItem(name: "v", value: "5.131"),
+        ]
+
+        let task = URLSession.shared.dataTask(with: components.url!) { data, response, error in
+
+            guard let data = data else {
+                return completion(.failure(.default))
+            }
+
+            let newsfeedResponse: NewsfeedResponse
+
+            do {
+                newsfeedResponse = try JSONDecoder().decode(NewsfeedResponse.self, from: data)
+            } catch {
+                return completion(.failure(.default))
+            }
+
+            completion(.success(newsfeedResponse))
+        }
+        task.resume()
+    }
+
+    func fetchNews(from time: TimeInterval, completion: @escaping (Result<NewsfeedResponse, NetworkError>) -> Void) {
+
+        let url = baseURL + "/newsfeed.get"
+
+        var components = URLComponents(string: url)!
+
+        components.queryItems = [
+            URLQueryItem(name: "filters", value: "post, photo"),
+            URLQueryItem(name: "start_time", value: String(time)),
+            URLQueryItem(name: "source_ids", value: "groups, pages"),
+            URLQueryItem(name: "count", value: "5"),
             URLQueryItem(name: "access_token", value: Session.shared.token),
             URLQueryItem(name: "v", value: "5.131"),
         ]
@@ -43,7 +77,7 @@ final class NewsfeedNetworkService {
         task.resume()
     }
 
-    func fetchNewsWithTime(_ time: TimeInterval, completion: @escaping (Result<NewsfeedResponse, NetworkError>) -> Void) {
+    func fetchMoreNews(from cursor: String, completion: @escaping (Result<NewsfeedResponse, NetworkError>) -> Void) {
 
         let url = baseURL + "/newsfeed.get"
 
@@ -51,9 +85,9 @@ final class NewsfeedNetworkService {
 
         components.queryItems = [
             URLQueryItem(name: "filters", value: "post, photo"),
-            URLQueryItem(name: "start_time", value: String(time)),
+            URLQueryItem(name: "start_from", value: cursor),
             URLQueryItem(name: "source_ids", value: "groups, pages"),
-            URLQueryItem(name: "count", value: "20"),
+            URLQueryItem(name: "count", value: "5"),
             URLQueryItem(name: "access_token", value: Session.shared.token),
             URLQueryItem(name: "v", value: "5.131"),
         ]

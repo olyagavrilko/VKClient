@@ -58,6 +58,7 @@ final class NewsfeedViewController: UIViewController {
         tableView.register(NewsfeedFooterCell.self, forCellReuseIdentifier: "NewsfeedFooterCell")
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.prefetchDataSource = self
 
         presenter.loadData()
     }
@@ -129,6 +130,19 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+extension NewsfeedViewController: UITableViewDataSourcePrefetching {
+
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard let maxSection = indexPaths.map({$0.section}).max() else {
+            return
+        }
+
+        if maxSection > presenter.sections.count - 3 {
+            presenter.loadMoreNews()
+        }
+    }
+}
+
 extension NewsfeedViewController: NewsfeedViewProtocol {
 
     func update() {
@@ -137,5 +151,9 @@ extension NewsfeedViewController: NewsfeedViewProtocol {
 
     func endRefreshing() {
         tableView.refreshControl?.endRefreshing()
+    }
+
+    func insertSections(_ indexSet: IndexSet) {
+        tableView.insertSections(indexSet, with: .automatic)
     }
 }
