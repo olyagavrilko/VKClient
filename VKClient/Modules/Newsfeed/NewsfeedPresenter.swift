@@ -11,6 +11,7 @@ protocol NewsfeedViewProtocol: AnyObject {
     func update()
     func endRefreshing()
     func insertSections(_ indexSet: IndexSet)
+    func reload(_ indexPaths: [IndexPath])
 }
 
 final class NewsfeedPresenter {
@@ -208,7 +209,22 @@ final class NewsfeedPresenter {
 
             var text: NewsfeedCellViewModel?
             if !model.text.isEmpty {
-                text = NewsfeedCellViewModel.text(NewsfeedTextCellViewModel(text: model.text))
+                text = NewsfeedCellViewModel.text(
+                    NewsfeedTextCellViewModel(
+                        text: model.text,
+                        isOpen: false,
+                        openCloseAction: { [weak self] indexPath in
+                            guard let self = self,
+                                  case var .text(viewModel) = self.sections[indexPath.section].items[indexPath.row]
+                            else {
+                                return
+                            }
+
+                            viewModel.isOpen.toggle()
+
+                            self.sections[indexPath.section].items[indexPath.row] = .text(viewModel)
+                            self.view?.reload([indexPath])
+                        }))
             }
 
             var photo: NewsfeedCellViewModel?

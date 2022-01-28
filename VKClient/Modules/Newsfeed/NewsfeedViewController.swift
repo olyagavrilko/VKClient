@@ -15,6 +15,8 @@ struct NewsfeedHeaderCellViewModel {
 
 struct NewsfeedTextCellViewModel {
     let text: String
+    var isOpen: Bool
+    let openCloseAction: (IndexPath) -> Void
 }
 
 struct NewsfeedPhotoCellViewModel {
@@ -37,7 +39,7 @@ enum NewsfeedCellViewModel {
 }
 
 struct NewsfeedSection {
-    let items: [NewsfeedCellViewModel]
+    var items: [NewsfeedCellViewModel]
 }
 
 final class NewsfeedViewController: UIViewController {
@@ -53,10 +55,10 @@ final class NewsfeedViewController: UIViewController {
         setupViews()
         setupRefreshControl()
 
-        tableView.register(NewsfeedHeaderCell.self, forCellReuseIdentifier: "NewsfeedHeaderCell")
-        tableView.register(NewsfeedTextCell.self, forCellReuseIdentifier: "NewsfeedTextCell")
-        tableView.register(NewsfeedPhotoCell.self, forCellReuseIdentifier: "NewsfeedPhotoCell")
-        tableView.register(NewsfeedFooterCell.self, forCellReuseIdentifier: "NewsfeedFooterCell")
+        tableView.register(cellClass: NewsfeedHeaderCell.self)
+        tableView.register(cellClass: NewsfeedTextCell.self)
+        tableView.register(cellClass: NewsfeedPhotoCell.self)
+        tableView.register(cellClass: NewsfeedFooterCell.self)
         tableView.delegate = self
         tableView.dataSource = self
         tableView.prefetchDataSource = self
@@ -104,29 +106,36 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
 
         switch item {
         case .header(let viewModel):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsfeedHeaderCell", for: indexPath) as? NewsfeedHeaderCell else {
-                return UITableViewCell()
-            }
+            let cell = tableView.dequeueReusableCell(NewsfeedHeaderCell.self, for: indexPath)
             cell.viewModel = viewModel
             return cell
         case .text(let viewModel):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsfeedTextCell", for: indexPath) as? NewsfeedTextCell else {
-                return UITableViewCell()
-            }
+            let cell = tableView.dequeueReusableCell(NewsfeedTextCell.self, for: indexPath)
             cell.viewModel = viewModel
+            cell.indexPath = indexPath
             return cell
         case .photo(let viewModel):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsfeedPhotoCell", for: indexPath) as? NewsfeedPhotoCell else {
-                return UITableViewCell()
-            }
+            let cell = tableView.dequeueReusableCell(NewsfeedPhotoCell.self, for: indexPath)
             cell.viewModel = viewModel
             return cell
         case .footer(let viewModel):
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "NewsfeedFooterCell", for: indexPath) as? NewsfeedFooterCell else {
-                return UITableViewCell()
-            }
+            let cell = tableView.dequeueReusableCell(NewsfeedFooterCell.self, for: indexPath)
             cell.viewModel = viewModel
             return cell
+        }
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        let item = presenter.sections[indexPath.section].items[indexPath.row]
+        switch item {
+        case .photo(let viewModel):
+            let width = view.frame.width
+            let height = width * viewModel.aspectRatio
+            return height
+        case .text(let viewModel):
+            return NewsfeedTextCell.height(fitting: view.frame.width, viewModel: viewModel)
+        case .header, .footer:
+            return 40
         }
     }
 
@@ -137,11 +146,9 @@ extension NewsfeedViewController: UITableViewDelegate, UITableViewDataSource {
             let width = view.frame.width
             let height = width * viewModel.aspectRatio
             return height
-        case .header(_):
-            return UITableView.automaticDimension
-        case .text(_):
-            return UITableView.automaticDimension
-        case .footer(_):
+        case .text(let viewModel):
+            return NewsfeedTextCell.height(fitting: view.frame.width, viewModel: viewModel)
+        case .header, .footer:
             return UITableView.automaticDimension
         }
     }
@@ -172,5 +179,11 @@ extension NewsfeedViewController: NewsfeedViewProtocol {
 
     func insertSections(_ indexSet: IndexSet) {
         tableView.insertSections(indexSet, with: .automatic)
+    }
+
+    func reload(_ indexPaths: [IndexPath]) {
+        UIView.performWithoutAnimation {
+            tableView.reloadRows(at: indexPaths, with: .automatic)
+        }
     }
 }
