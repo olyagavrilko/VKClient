@@ -7,34 +7,11 @@
 
 import UIKit
 
-//extension UIImageView {
-//
-//    static var dict: [String: UIImage] = [:]
-//
-//    func load(_ urlString: String) {
-//        if let image = UIImageView.dict[urlString] {
-//            self.image = image
-//            return
-//        }
-//        guard let url = URL(string: urlString) else {
-//            return
-//        }
-//        DispatchQueue.global().async { [weak self] in
-//            if let data = try? Data(contentsOf: url) {
-//                if let image = UIImage(data: data) {
-//                    DispatchQueue.main.async {
-//                        UIImageView.dict[urlString] = image
-//                        self?.image = image
-//                    }
-//                }
-//            }
-//        }
-//    }
-//}
-
 final class CachedImageView: UIImageView {
 
     private var imageURL: URL?
+
+    private let photoFileService = PhotoFileService.shared
 
     static var dict: [URL: UIImage] = [:]
 
@@ -48,14 +25,21 @@ final class CachedImageView: UIImageView {
 
         if let image = Self.dict[url] {
             self.image = image
-            return
+        } else if let image = photoFileService.image(by: url) {
+            Self.dict[url] = image
+            self.image = image
+        } else {
+            loadImage(by: url)
         }
+    }
 
+    private func loadImage(by url: URL) {
         DispatchQueue.global().async { [weak self] in
             if let data = try? Data(contentsOf: url) {
                 if let image = UIImage(data: data) {
                     DispatchQueue.main.async {
                         Self.dict[url] = image
+                        self?.photoFileService.save(image: image, with: url)
                         if self?.imageURL == url {
                             self?.image = image
                         }

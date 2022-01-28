@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		09A3C78A0E0C07A448383D88 /* Pods_VKClientTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6843882FE475C46042EC0938 /* Pods_VKClientTests.framework */; };
+		190341F92795CBBD009C95A4 /* PhotoFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190341F82795CBBD009C95A4 /* PhotoFileService.swift */; };
 		191B4128268CC4030066047B /* APIServise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191B4127268CC4020066047B /* APIServise.swift */; };
 		191B4138268E05FE0066047B /* Data + PrettyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191B4137268E05FE0066047B /* Data + PrettyJSON.swift */; };
 		193048652682143500A3AF0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193048642682143500A3AF0B /* AppDelegate.swift */; };
@@ -64,6 +65,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		190341F82795CBBD009C95A4 /* PhotoFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFileService.swift; sourceTree = "<group>"; };
 		191B4127268CC4020066047B /* APIServise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServise.swift; sourceTree = "<group>"; };
 		191B4137268E05FE0066047B /* Data + PrettyJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data + PrettyJSON.swift"; sourceTree = "<group>"; };
 		193048612682143500A3AF0B /* VKClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -221,6 +223,7 @@
 				191B4127268CC4020066047B /* APIServise.swift */,
 				193F257527620CF60080725B /* RealmManager.swift */,
 				19E65BD02769277800400B30 /* FirebaseModel.swift */,
+				190341F82795CBBD009C95A4 /* PhotoFileService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -624,6 +627,7 @@
 				19CA75722698C55400F15FB7 /* Photo.swift in Sources */,
 				19A1BD6E26A1A40E00154416 /* GroupCell.swift in Sources */,
 				1930486F2682143500A3AF0B /* VKClient.xcdatamodeld in Sources */,
+				190341F92795CBBD009C95A4 /* PhotoFileService.swift in Sources */,
 				193F257627620CF60080725B /* RealmManager.swift in Sources */,
 				19CA75612697A6CB00F15FB7 /* UIImageView+Extension.swift in Sources */,
 				19A1BD6626A1A3E100154416 /* MyGroupsViewController.swift in Sources */,
