@@ -25,7 +25,7 @@ final class FriendsViewController: UIViewController {
 
         super.viewDidLoad()
         setupViews()
-        tableView.register(FriendCell.self, forCellReuseIdentifier: "FriendCell")
+        tableView.register(cellClass: FriendCell.self)
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
@@ -136,11 +136,8 @@ extension FriendsViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell: FriendCell = tableView.dequeueReusableCell(withIdentifier: "FriendCell", for: indexPath) as? FriendCell else {
-            return UITableViewCell()
-        }
+        let cell = tableView.dequeueReusableCell(FriendCell.self, for: indexPath)
         cell.friendItem = friends?[indexPath.row]
-
         return cell
     }
 }

@@ -38,8 +38,7 @@ final class NewsfeedPhotoCell: UITableViewCell {
             photoImageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             photoImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             photoImageView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            photoImageView.heightAnchor.constraint(equalToConstant: 160)
+            photoImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
     }
 }

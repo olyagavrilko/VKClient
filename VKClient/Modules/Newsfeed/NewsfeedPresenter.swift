@@ -9,22 +9,38 @@ import Foundation
 
 protocol NewsfeedViewProtocol: AnyObject {
     func update()
+    func endRefreshing()
+    func insertSections(_ indexSet: IndexSet)
+    func reload(_ indexPaths: [IndexPath])
 }
 
 final class NewsfeedPresenter {
 
     weak var view: NewsfeedViewProtocol?
 
-    var news: [NewsItem] = []
-    var groups: [Group] = []
-    var profiles: [Profile] = []
+    private var news: [NewsItem] = []
+    private var groups: [Group] = []
+    private var profiles: [Profile] = []
+
+    private var latestLoadTime: TimeInterval?
+    private var cursor: String?
+    private var isLoading = false
 
     private let networkService = NewsfeedNetworkService()
 
     private(set) var sections: [NewsfeedSection] = []
 
     func loadData() {
+
+        guard !isLoading else {
+            return
+        }
+
+        isLoading = true
         networkService.fetchNews() { [weak self] result in
+
+            self?.isLoading = false
+
             switch result {
             case .success(let result):
 
@@ -35,6 +51,14 @@ final class NewsfeedPresenter {
                 self.news = result.response.items
                 self.groups = result.response.groups
                 self.profiles = result.response.profiles
+
+                self.cursor = result.response.nextFrom
+
+                if let latestLoadTime = self.news.first?.date {
+                    self.latestLoadTime = Double(latestLoadTime + 1)
+                } else {
+                    self.latestLoadTime = nil
+                }
 
                 DispatchQueue.global().async {
                     self.sections = self.makeSections(using: self.news, using: self.groups, using: self.profiles)
@@ -48,6 +72,111 @@ final class NewsfeedPresenter {
                 break
             }
         }
+    }
+
+    private func loadData(from time: TimeInterval) {
+
+        guard !isLoading else {
+            return
+        }
+
+        isLoading = true
+        networkService.fetchNews(from: time) { [weak self] result in
+
+            self?.isLoading = false
+
+            switch result {
+            case .success(let result):
+
+                guard let self = self else {
+                    return
+                }
+
+                self.news.insert(contentsOf: result.response.items, at: 0)
+                self.groups.insert(contentsOf: result.response.groups, at: 0)
+                self.profiles.insert(contentsOf: result.response.profiles, at: 0)
+
+                self.cursor = result.response.nextFrom
+
+                if let latestLoadTime = self.news.first?.date {
+                    self.latestLoadTime = Double(latestLoadTime + 1)
+                } else {
+                    self.latestLoadTime = nil
+                }
+
+                DispatchQueue.global().async {
+                    self.sections = self.makeSections(using: self.news, using: self.groups, using: self.profiles)
+
+                    DispatchQueue.main.async {
+                        self.view?.endRefreshing()
+                        self.view?.update()
+                    }
+                }
+
+            case .failure:
+                break
+            }
+        }
+    }
+
+    private func loadData(from cursor: String) {
+
+        guard !isLoading else {
+            return
+        }
+
+        isLoading = true
+        networkService.fetchMoreNews(from: cursor) { [weak self] result in
+
+            self?.isLoading = false
+
+            switch result {
+            case .success(let result):
+
+                guard let self = self else {
+                    return
+                }
+
+                self.news += result.response.items
+                self.groups += result.response.groups
+                self.profiles += result.response.profiles
+
+                self.cursor = result.response.nextFrom
+
+
+                DispatchQueue.global().async {
+                    let newSections = self.makeSections(
+                        using: result.response.items,
+                        using: result.response.groups,
+                        using: result.response.profiles)
+
+                    let indexSet = IndexSet(integersIn: self.sections.count..<self.sections.count + newSections.count)
+                    self.sections += newSections
+
+                    DispatchQueue.main.async {
+                        self.view?.insertSections(indexSet)
+                    }
+                }
+
+            case .failure:
+                break
+            }
+        }
+    }
+
+    func refreshNews() {
+        if let latestLoadTime = latestLoadTime {
+            loadData(from: latestLoadTime)
+        } else {
+            loadData()
+        }
+    }
+
+    func loadMoreNews() {
+        guard let cursor = cursor else {
+            return
+        }
+        loadData(from: cursor)
     }
 
     private func makeSections(using models: [NewsItem], using groups: [Group], using profiles: [Profile]) -> [NewsfeedSection] {
@@ -80,12 +209,28 @@ final class NewsfeedPresenter {
 
             var text: NewsfeedCellViewModel?
             if !model.text.isEmpty {
-                text = NewsfeedCellViewModel.text(NewsfeedTextCellViewModel(text: model.text))
+                text = NewsfeedCellViewModel.text(
+                    NewsfeedTextCellViewModel(
+                        text: model.text,
+                        isOpen: false,
+                        openCloseAction: { [weak self] indexPath in
+                            guard let self = self,
+                                  case var .text(viewModel) = self.sections[indexPath.section].items[indexPath.row]
+                            else {
+                                return
+                            }
+
+                            viewModel.isOpen.toggle()
+
+                            self.sections[indexPath.section].items[indexPath.row] = .text(viewModel)
+                            self.view?.reload([indexPath])
+                        }))
             }
 
             var photo: NewsfeedCellViewModel?
-            if let imageURLString = model.attachments.first?.photo?.sizes.first?.url {
-                photo = .photo(.init(imageURL: imageURLString))
+            if let imageURLString = model.photo?.url,
+               let imageAspectRatio = model.photo?.aspectRatio {
+                photo = .photo(NewsfeedPhotoCellViewModel(imageURL: imageURLString, aspectRatio: imageAspectRatio))
             }
 
             let footer = NewsfeedCellViewModel.footer(NewsfeedFooterCellViewModel(

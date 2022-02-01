@@ -9,15 +9,36 @@ import UIKit
 
 final class NewsfeedTextCell: UITableViewCell {
 
+    enum Consts {
+        static let horizontalInset: CGFloat = 8
+        static let spacing: CGFloat = 4
+        static let buttonHeight: CGFloat = 32
+        static let defaultLinesCount = 5
+        static let font = UIFont.systemFont(ofSize: 17)
+    }
+
     var viewModel: NewsfeedTextCellViewModel? {
         didSet {
             guard let viewModel = viewModel else {
                 return
             }
             label.text = viewModel.text
+            label.numberOfLines = viewModel.isOpen ? 0 : Consts.defaultLinesCount
+
+            let width = UIScreen.main.bounds.width - 2 * Consts.horizontalInset
+
+            button.isHidden = NewsfeedTextCell.isButtonHidden(width: width, text: viewModel.text)
+            if viewModel.isOpen {
+                button.setTitle("Скрыть...", for: .normal)
+            } else {
+                button.setTitle("Показать полностью...", for: .normal)
+            }
         }
     }
 
+    var indexPath: IndexPath?
+
+    private let stackView = UIStackView()
     private let label = UILabel()
     private let button = UIButton()
 
@@ -31,29 +52,78 @@ final class NewsfeedTextCell: UITableViewCell {
     }
 
     private func setupViews() {
-        label.backgroundColor = .white
-        label.numberOfLines = 0
-        contentView.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
+
+        stackView.axis = .vertical
+        stackView.spacing = Consts.spacing
+        stackView.alignment = .leading
+        contentView.addSubview(stackView)
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
-            label.topAnchor.constraint(equalTo: contentView.topAnchor)
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Consts.horizontalInset),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Consts.horizontalInset),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
 
+        label.backgroundColor = .white
+        label.font = Consts.font
+        stackView.addArrangedSubview(label)
+
         button.addTarget(self, action: #selector(showMoreButtonDidTap), for: .touchUpInside)
-        button.setTitle("Показать полностью...", for: .normal)
         button.setTitleColor(UIColor(red: 44/255, green: 89/255, blue: 132/255, alpha: 1), for: .normal)
-        contentView.addSubview(button)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            button.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
-            button.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 4),
-            button.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-        ])
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
+        stackView.addArrangedSubview(button)
     }
 
     @objc private func showMoreButtonDidTap() {
+        guard let indexPath = indexPath else {
+            return
+        }
+        viewModel?.openCloseAction(indexPath)
+    }
 
+    static func height(fitting width: CGFloat, viewModel: NewsfeedTextCellViewModel) -> CGFloat {
+
+        let width = width - 2 * Consts.horizontalInset
+        let maxNumberOfLines = viewModel.isOpen ? 0 : CGFloat(Consts.defaultLinesCount)
+
+        let finishLabelHeight = calculateTextHeight(
+            fitting: width,
+            text: viewModel.text,
+            maxNumberOfLines: Int(maxNumberOfLines))
+
+        var height = finishLabelHeight
+        if !isButtonHidden(width: width, text: viewModel.text) {
+            height += Consts.spacing + Consts.buttonHeight
+        }
+
+        return height
+    }
+
+    private static func isButtonHidden(width: CGFloat, text: String) -> Bool {
+        let maxTextHeight = calculateTextHeight(
+            fitting: width,
+            text: text,
+            maxNumberOfLines: 0)
+
+        let limitHeight = CGFloat(Consts.defaultLinesCount) * Consts.font.lineHeight
+
+        return maxTextHeight <= limitHeight
+    }
+
+    private static func calculateTextHeight(fitting width: CGFloat, text: String, maxNumberOfLines: Int) -> CGFloat {
+
+        let textHeight = maxNumberOfLines == 0
+            ? .greatestFiniteMagnitude
+            : CGFloat(maxNumberOfLines) * Consts.font.lineHeight
+
+        let rect = CGSize(width: width, height: textHeight)
+        let boundingBox = text.boundingRect(
+            with: rect,
+            options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine],
+            attributes: [NSAttributedString.Key.font: Consts.font],
+            context: nil)
+
+        return ceil(boundingBox.height)
     }
 }

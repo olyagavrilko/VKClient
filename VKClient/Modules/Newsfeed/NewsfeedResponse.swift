@@ -15,6 +15,14 @@ struct InternalNewsfeedResponse: Decodable {
     let items: [NewsItem]
     let profiles: [Profile]
     let groups: [Group]
+    let nextFrom: String
+
+    enum CodingKeys: String, CodingKey {
+        case items
+        case profiles
+        case groups
+        case nextFrom = "next_from"
+    }
 }
 
 struct NewsItem: Decodable {
@@ -39,6 +47,10 @@ struct NewsItem: Decodable {
         let photo: Photo?
     }
 
+    var photo: Photo? {
+        attachments?.first?.photo
+    }
+
     let sourceId: Int
     let date: Int
     let text: String
@@ -46,7 +58,7 @@ struct NewsItem: Decodable {
     let likes: Likes
     let reposts: Reposts
     let views: Views
-    let attachments: [Attachment]
+    let attachments: [Attachment]?
 
     enum CodingKeys: String, CodingKey {
         case sourceId = "source_id"

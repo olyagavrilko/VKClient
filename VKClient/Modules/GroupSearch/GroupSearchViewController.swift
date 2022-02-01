@@ -26,7 +26,7 @@ class GroupSearchViewController: UIViewController {
         setupViews()
         setupSearchBar()
 
-        tableView.register(GroupCell.self, forCellReuseIdentifier: "GroupCell")
+        tableView.register(cellClass: GroupCell.self)
         tableView.separatorStyle = .none
         tableView.delegate = self
         tableView.dataSource = self
@@ -96,9 +96,7 @@ extension GroupSearchViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell: GroupCell = tableView.dequeueReusableCell(withIdentifier: "GroupCell", for: indexPath) as? GroupCell else {
-            return UITableViewCell()
-        }
+        let cell = tableView.dequeueReusableCell(GroupCell.self, for: indexPath)
         cell.groupItem = groups[indexPath.row]
         return cell
     }

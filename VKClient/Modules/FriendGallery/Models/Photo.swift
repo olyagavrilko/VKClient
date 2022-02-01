@@ -25,18 +25,27 @@ class Photo: Object, Decodable {
     @objc dynamic var id = 0
     @objc dynamic var owner_id = 0
 
+    var size: Size? {
+        sizes.last
+    }
+
+    var url: String? {
+        guard let size = size else {
+            return nil
+        }
+        return size.url
+    }
+
+    var aspectRatio: CGFloat? {
+        guard let size = size else {
+            return nil
+        }
+        return CGFloat(size.height) / CGFloat(size.width)
+    }
+
     override class func primaryKey() -> String? {
         "id"
     }
-
-//    override class func ignoredProperties() -> [String] {
-//        ["sizes"]
-//    }
-
-//    @objc dynamic var owner: User?
-
-//    let user = LinkingObject(fromType: User.self, property: "photos")
-//    let user = LinkingObjects(
 }
 
 // MARK: - Size

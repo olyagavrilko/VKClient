@@ -27,6 +27,7 @@
 		19A1BD6626A1A3E100154416 /* MyGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1BD6526A1A3E100154416 /* MyGroupsViewController.swift */; };
 		19A1BD6E26A1A40E00154416 /* GroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1BD6D26A1A40E00154416 /* GroupCell.swift */; };
 		19A1BD7426A1A59900154416 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19A1BD7326A1A59900154416 /* Group.swift */; };
+		19B2F19C27A4371D00E5E3BD /* UITableView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19B2F19B27A4371D00E5E3BD /* UITableView+Extension.swift */; };
 		19C99000268274C300390736 /* Session.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C98FFF268274C300390736 /* Session.swift */; };
 		19CA754426960B9800F15FB7 /* FriendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CA754326960B9800F15FB7 /* FriendCell.swift */; };
 		19CA754B26971AF900F15FB7 /* FriendGalleryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19CA754A26971AF900F15FB7 /* FriendGalleryViewController.swift */; };
@@ -90,6 +91,7 @@
 		19A1BD6526A1A3E100154416 /* MyGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyGroupsViewController.swift; sourceTree = "<group>"; };
 		19A1BD6D26A1A40E00154416 /* GroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupCell.swift; sourceTree = "<group>"; };
 		19A1BD7326A1A59900154416 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
+		19B2F19B27A4371D00E5E3BD /* UITableView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+Extension.swift"; sourceTree = "<group>"; };
 		19C98FFF268274C300390736 /* Session.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Session.swift; sourceTree = "<group>"; };
 		19CA754326960B9800F15FB7 /* FriendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendCell.swift; sourceTree = "<group>"; };
 		19CA754A26971AF900F15FB7 /* FriendGalleryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendGalleryViewController.swift; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 				191B4137268E05FE0066047B /* Data + PrettyJSON.swift */,
 				19CA75602697A6CB00F15FB7 /* UIImageView+Extension.swift */,
 				19E65BAA2763D81700400B30 /* Results+Extension.swift */,
+				19B2F19B27A4371D00E5E3BD /* UITableView+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -631,6 +634,7 @@
 				193F257627620CF60080725B /* RealmManager.swift in Sources */,
 				19CA75612697A6CB00F15FB7 /* UIImageView+Extension.swift in Sources */,
 				19A1BD6626A1A3E100154416 /* MyGroupsViewController.swift in Sources */,
+				19B2F19C27A4371D00E5E3BD /* UITableView+Extension.swift in Sources */,
 				193048652682143500A3AF0B /* AppDelegate.swift in Sources */,
 				19CA755026971B4200F15FB7 /* GalleryCell.swift in Sources */,
 				199024A826837A98004F5527 /* AuthorizationViewController.swift in Sources */,
