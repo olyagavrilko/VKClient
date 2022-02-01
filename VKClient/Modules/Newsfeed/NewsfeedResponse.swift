@@ -15,6 +15,14 @@ struct InternalNewsfeedResponse: Decodable {
     let items: [NewsItem]
     let profiles: [Profile]
     let groups: [Group]
+    let nextFrom: String
+
+    enum CodingKeys: String, CodingKey {
+        case items
+        case profiles
+        case groups
+        case nextFrom = "next_from"
+    }
 }
 
 struct NewsItem: Decodable {
@@ -39,40 +47,9 @@ struct NewsItem: Decodable {
         let photo: Photo?
     }
 
-//    enum Attachment: Decodable, Equatable {
-//        case photo(Photo)
-//
-//        enum CodingKeys: String, CodingKey {
-//            case type
-//            case photo
-//        }
-//
-//        enum AttachmentType: String {
-//            case photo
-//        }
-//
-//        var type: AttachmentType {
-//            switch self {
-//            case .photo:
-//                return .photo
-//            }
-//        }
-//
-//        init(from decoder: Decoder) throws {
-//            let container = try decoder.container(keyedBy: CodingKeys.self)
-//            let typeString = try container.decode(String.self, forKey: .type)
-//
-//            guard let type = AttachmentType(rawValue: typeString) else {
-//                throw NetworkError.default
-//            }
-//
-//            switch type {
-//            case .photo:
-//                let photo = try container.decode(Photo.self, forKey: .photo)
-//                self = .photo(photo)
-//            }
-//        }
-//    }
+    var photo: Photo? {
+        attachments?.first?.photo
+    }
 
     let sourceId: Int
     let date: Int
@@ -81,7 +58,7 @@ struct NewsItem: Decodable {
     let likes: Likes
     let reposts: Reposts
     let views: Views
-    let attachments: [Attachment]
+    let attachments: [Attachment]?
 
     enum CodingKeys: String, CodingKey {
         case sourceId = "source_id"
