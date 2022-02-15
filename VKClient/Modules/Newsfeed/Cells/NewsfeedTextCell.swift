@@ -70,7 +70,7 @@ final class NewsfeedTextCell: UITableViewCell {
         stackView.addArrangedSubview(label)
 
         button.addTarget(self, action: #selector(showMoreButtonDidTap), for: .touchUpInside)
-        button.setTitleColor(UIColor(red: 44/255, green: 89/255, blue: 132/255, alpha: 1), for: .normal)
+        button.setTitleColor(UIColor.vkBlueColor, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         stackView.addArrangedSubview(button)
     }

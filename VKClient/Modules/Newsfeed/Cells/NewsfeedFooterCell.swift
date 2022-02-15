@@ -60,8 +60,8 @@ final class NewsfeedFooterCell: UITableViewCell {
         view.setContentHuggingPriority(.defaultLow, for: .horizontal)
         stackView.addArrangedSubview(view)
 
-        viewsButton.setTitleColor(UIColor(red: 154/255, green: 162/255, blue: 173/255, alpha: 1), for: .normal)
-        viewsButton.tintColor = UIColor(red: 154/255, green: 162/255, blue: 173/255, alpha: 1)
+        viewsButton.setTitleColor(UIColor.vkGrayColor, for: .normal)
+        viewsButton.tintColor = UIColor.vkGrayColor
         viewsButton.titleLabel?.font = .systemFont(ofSize: 14)
         viewsButton.setImage(UIImage(systemName: "eye.fill"), for: .normal)
         viewsButton.imageView?.contentMode = .scaleAspectFit
@@ -70,12 +70,12 @@ final class NewsfeedFooterCell: UITableViewCell {
     }
 
     private func setupButton(_ button: UIButton, imageSystemName: String) {
-        button.setTitleColor(UIColor(red: 154/255, green: 162/255, blue: 173/255, alpha: 1), for: .normal)
-        button.tintColor = UIColor(red: 154/255, green: 162/255, blue: 173/255, alpha: 1)
+        button.setTitleColor(UIColor.vkGrayColor, for: .normal)
+        button.tintColor = UIColor.vkGrayColor
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
         button.imageEdgeInsets = UIEdgeInsets(top: 4, left: -5, bottom: 4, right: 5)
         button.titleLabel?.font = .systemFont(ofSize: 16)
-        button.backgroundColor = UIColor(red: 240/255, green: 242/255, blue: 245/255, alpha: 1)
+        button.backgroundColor = UIColor.vkLightGrayColor
         button.setImage(UIImage(systemName: imageSystemName), for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.layer.cornerRadius = 16

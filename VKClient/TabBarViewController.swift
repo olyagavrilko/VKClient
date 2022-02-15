@@ -14,7 +14,7 @@ class TabBarViewController: UITabBarController {
         view.backgroundColor = .systemBackground
         UITabBar.appearance().barTintColor = .systemBackground
         navigationItem.largeTitleDisplayMode = .never
-        tabBar.tintColor = UIColor(red: 45/255, green: 129/255, blue: 224/255, alpha: 1)
+        tabBar.tintColor = UIColor.vkBlueColor
         setupVCs()
     }
 
