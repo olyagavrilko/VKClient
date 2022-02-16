@@ -56,14 +56,16 @@ class MyGroupsViewController: UIViewController {
     }
 
     func loadData() {
-        apiService.getGroups { result in
-            switch result {
-            case .success(let groups):
-                self.saveGroupsData(groups)
-            case .failure:
-                break
-            }
-        }
+//        apiService.getGroups { result in
+//            switch result {
+//            case .success(let groups):
+//                self.saveGroupsData(groups)
+//            case .failure:
+//                break
+//            }
+//        }
+
+        apiService.getGroupsForAdapter(delegate: self)
     }
 
     func subscribe() {
@@ -179,5 +181,12 @@ extension MyGroupsViewController: GroupSearchViewControllerDelgate {
         let userRef = self.ref.child(Session.shared.userId)
         userRef.setValue(firebaseUser.toAnyObject())
         loadData()
+    }
+}
+
+extension MyGroupsViewController: ApiGroupsDelegate {
+
+    func returnGroups(_ groups: [Group]) {
+        saveGroupsData(groups)
     }
 }

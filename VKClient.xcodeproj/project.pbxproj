@@ -10,7 +10,7 @@
 		09A3C78A0E0C07A448383D88 /* Pods_VKClientTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6843882FE475C46042EC0938 /* Pods_VKClientTests.framework */; };
 		190341F92795CBBD009C95A4 /* PhotoFileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 190341F82795CBBD009C95A4 /* PhotoFileService.swift */; };
 		191B4128268CC4030066047B /* APIServise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191B4127268CC4020066047B /* APIServise.swift */; };
-		191B4138268E05FE0066047B /* Data + PrettyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191B4137268E05FE0066047B /* Data + PrettyJSON.swift */; };
+		191B4138268E05FE0066047B /* Data+PrettyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 191B4137268E05FE0066047B /* Data+PrettyJSON.swift */; };
 		1929127E27BBC5E5005CB8EC /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1929127D27BBC5E5005CB8EC /* UIColor+Extension.swift */; };
 		193048652682143500A3AF0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193048642682143500A3AF0B /* AppDelegate.swift */; };
 		193048692682143500A3AF0B /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 193048682682143500A3AF0B /* FriendsViewController.swift */; };
@@ -69,7 +69,7 @@
 /* Begin PBXFileReference section */
 		190341F82795CBBD009C95A4 /* PhotoFileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoFileService.swift; sourceTree = "<group>"; };
 		191B4127268CC4020066047B /* APIServise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServise.swift; sourceTree = "<group>"; };
-		191B4137268E05FE0066047B /* Data + PrettyJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data + PrettyJSON.swift"; sourceTree = "<group>"; };
+		191B4137268E05FE0066047B /* Data+PrettyJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+PrettyJSON.swift"; sourceTree = "<group>"; };
 		1929127D27BBC5E5005CB8EC /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		193048612682143500A3AF0B /* VKClient.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VKClient.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		193048642682143500A3AF0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -152,7 +152,7 @@
 		191B4136268E05A80066047B /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				191B4137268E05FE0066047B /* Data + PrettyJSON.swift */,
+				191B4137268E05FE0066047B /* Data+PrettyJSON.swift */,
 				19CA75602697A6CB00F15FB7 /* UIImageView+Extension.swift */,
 				19E65BAA2763D81700400B30 /* Results+Extension.swift */,
 				19B2F19B27A4371D00E5E3BD /* UITableView+Extension.swift */,
@@ -644,7 +644,7 @@
 				199024A826837A98004F5527 /* AuthorizationViewController.swift in Sources */,
 				19CA754B26971AF900F15FB7 /* FriendGalleryViewController.swift in Sources */,
 				19E65BE52774CAF200400B30 /* NewsfeedTextCell.swift in Sources */,
-				191B4138268E05FE0066047B /* Data + PrettyJSON.swift in Sources */,
+				191B4138268E05FE0066047B /* Data+PrettyJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

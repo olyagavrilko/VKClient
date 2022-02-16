@@ -8,6 +8,10 @@
 import Alamofire
 import Foundation
 
+protocol ApiGroupsDelegate {
+    func returnGroups(_ groups: [Group])
+}
+
 enum NetworkError: Error {
     case noDataProvided
     case failedToDecode
@@ -80,6 +84,36 @@ final class APIService {
 
             DispatchQueue.main.async {
                 completion(.success(groups))
+            }
+        }
+    }
+
+    func getGroupsForAdapter(delegate: ApiGroupsDelegate) {
+
+        let url = baseURL + "/groups.get"
+
+        let parameters: Parameters = [
+            "user_id": "225909217",
+            "extended": 1,
+            "fields": "activity",
+            "access_token": Session.shared.token,
+            "v": "5.131"
+        ]
+
+        AF.request(url, method: .get, parameters: parameters).responseData { response in
+
+            guard let data = response.data else {
+                return
+            }
+
+            let groupsResponse = try? JSONDecoder().decode(GroupsResponse.self, from: data)
+
+            guard let groups = groupsResponse?.response.items else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                delegate.returnGroups(groups)
             }
         }
     }

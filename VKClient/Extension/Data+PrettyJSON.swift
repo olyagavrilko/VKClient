@@ -1,5 +1,5 @@
 //
-//  Data + PrettyJSON.swift
+//  Data+PrettyJSON.swift
 //  VKClient
 //
 //  Created by Olya Ganeva on 01.07.2021.
