@@ -9,6 +9,12 @@ import UIKit
 
 class GroupCell: UITableViewCell {
 
+    struct Config {
+        let imageURL: String
+        let title: String
+        let subtitle: String
+    }
+
     let photoImageView = CachedImageView()
     let titleLabel = UILabel()
     let subtitleLabel = UILabel()
@@ -69,5 +75,13 @@ class GroupCell: UITableViewCell {
             subtitleLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5),
             subtitleLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16)
         ])
+    }
+
+    func update(with config: Config) {
+        
+        photoImageView.image = UIImage()
+        photoImageView.load(config.imageURL)
+        titleLabel.text = config.title
+        subtitleLabel.text = config.subtitle
     }
 }

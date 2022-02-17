@@ -19,6 +19,8 @@ class MyGroupsViewController: UIViewController {
 
     private let groupsAdapter = GroupsAdapter()
 
+    private var cellConfigs: [GroupCell.Config] = []
+
     let realm = RealmManager.shared
     var token: NotificationToken?
 
@@ -81,23 +83,24 @@ class MyGroupsViewController: UIViewController {
 
             switch changes {
             case .initial:
-                self.tableView.reloadData()
+                self.updateView()
 
             case .update(_,
                          let deletions,
                          let insertions,
                          let modifications):
-                let deletionsIndexPath = deletions.map { IndexPath(row: $0, section: 0) }
-                let insertionsIndexPath = insertions.map { IndexPath(row: $0, section: 0) }
-                let modificationsIndexPath = modifications.map { IndexPath(row: $0, section: 0) }
+//                let deletionsIndexPath = deletions.map { IndexPath(row: $0, section: 0) }
+//                let insertionsIndexPath = insertions.map { IndexPath(row: $0, section: 0) }
+//                let modificationsIndexPath = modifications.map { IndexPath(row: $0, section: 0) }
 
-                DispatchQueue.main.async {
-                    self.tableView.beginUpdates()
-                    self.tableView.insertRows(at: insertionsIndexPath, with: .automatic)
-                    self.tableView.deleteRows(at: deletionsIndexPath, with: .automatic)
-                    self.tableView.reloadRows(at: modificationsIndexPath, with: .automatic)
-                    self.tableView.endUpdates()
-                }
+//                DispatchQueue.main.async {
+//                    self.tableView.beginUpdates()
+//                    self.tableView.insertRows(at: insertionsIndexPath, with: .automatic)
+//                    self.tableView.deleteRows(at: deletionsIndexPath, with: .automatic)
+//                    self.tableView.reloadRows(at: modificationsIndexPath, with: .automatic)
+//                    self.tableView.endUpdates()
+//                }
+                self.updateView()
 
             case .error(let error):
                 print("\(error)")
@@ -107,7 +110,7 @@ class MyGroupsViewController: UIViewController {
 
     private func loadFromCache() {
         self.groups = self.realm?.getObjects(type: Group.self)
-        self.tableView.reloadData()
+        self.updateView()
     }
 
     private func saveGroupsData(_ groups: [Group]) {
@@ -138,6 +141,23 @@ class MyGroupsViewController: UIViewController {
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
+
+    func makeConfigs(using groups: Results<Group>) -> [GroupCell.Config] {
+        groups.compactMap { group in
+            guard let activity = group.activity else {
+                return nil
+            }
+            return GroupCell.Config(imageURL: group.photo100, title: group.name, subtitle: activity)
+        }
+    }
+
+    func updateView() {
+        guard let groups = groups else {
+            return
+        }
+        cellConfigs = makeConfigs(using: groups)
+        tableView.reloadData()
+    }
 }
 
 extension MyGroupsViewController: UITableViewDelegate {
@@ -149,7 +169,7 @@ extension MyGroupsViewController: UITableViewDelegate {
         apiService.leaveGroup(id: id) { response in
             if response == 1 {
                 self.loadData()
-                self.tableView.reloadData()
+                self.updateView()
             }
         }
     }
@@ -168,12 +188,12 @@ extension MyGroupsViewController: UITableViewDelegate {
 
 extension MyGroupsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return groups?.count ?? 0
+        return cellConfigs.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(GroupCell.self, for: indexPath)
-        cell.groupItem = groups?[indexPath.row]
+        cell.update(with: cellConfigs[indexPath.row])
         return cell
     }
 }
