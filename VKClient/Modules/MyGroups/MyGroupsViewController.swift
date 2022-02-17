@@ -17,6 +17,8 @@ class MyGroupsViewController: UIViewController {
     private var communitiesFirebase = [FirebaseCommunity]()
     private var ref = Database.database().reference(withPath: "Users")
 
+    private let groupsAdapter = GroupsAdapter()
+
     let realm = RealmManager.shared
     var token: NotificationToken?
 
@@ -65,7 +67,11 @@ class MyGroupsViewController: UIViewController {
 //            }
 //        }
 
-        apiService.getGroupsForAdapter(delegate: self)
+//        apiService.getGroupsForAdapter(delegate: self)
+
+        groupsAdapter.getGroups { [weak self] groups in
+            self?.saveGroupsData(groups)
+        }
     }
 
     func subscribe() {
