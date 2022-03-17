@@ -15,7 +15,7 @@ protocol GroupSearchViewControllerDelgate: AnyObject {
 class GroupSearchViewController: UIViewController {
 
     private let tableView = UITableView()
-    private let apiService = APIService()
+    private let apiService = APIServiceProxy(apiService: APIService())
     private var groups = [Group]()
 
     weak var delegate: GroupSearchViewControllerDelgate?

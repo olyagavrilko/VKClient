@@ -10,7 +10,7 @@ import RealmSwift
 
 class FriendGalleryViewController: UIViewController {
 
-    private let apiService = APIService()
+    private let apiService = APIServiceProxy(apiService: APIService())
     var photos: Results<Photo>?
     var user: User?
 

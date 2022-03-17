@@ -12,7 +12,7 @@ import FirebaseDatabase
 class MyGroupsViewController: UIViewController {
 
     private let tableView = UITableView()
-    private let apiService = APIService()
+    private let apiService = APIServiceProxy(apiService: APIService())
     private var groups: Results<Group>?
     private var communitiesFirebase = [FirebaseCommunity]()
     private var ref = Database.database().reference(withPath: "Users")
