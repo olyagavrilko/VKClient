@@ -1,5 +1,5 @@
 //
-//  APIServise.swift
+//  APIService.swift
 //  VKClient
 //
 //  Created by Olya Ganeva on 30.06.2021.
@@ -7,6 +7,15 @@
 
 import Alamofire
 import Foundation
+
+protocol APIServiceProtocol {
+
+    func getPhotos(userId: Int, completion: @escaping (Result<[Photo], NetworkError>) -> Void)
+    func getGroups(completion: @escaping (Result<[Group], NetworkError>) -> Void)
+    func searchGroups(text: String, completion: @escaping ([Group]) -> Void)
+    func joinGroup(id: Int, completion: @escaping (Int) -> Void)
+    func leaveGroup(id: Int, completion: @escaping (Int) -> Void)
+}
 
 enum NetworkError: Error {
     case noDataProvided
@@ -16,12 +25,12 @@ enum NetworkError: Error {
     case `default`
 }
 
-final class APIService {
+final class APIService: APIServiceProtocol {
 
     let baseURL = "https://api.vk.com/method"
     let token = Session.shared.token
     let clientID = Session.shared.userId
-    private let version = "5.131"
+    let version = "5.131"
 
     func getPhotos(userId: Int, completion: @escaping (Result<[Photo], NetworkError>) -> Void)  {
 
@@ -171,6 +180,40 @@ final class APIService {
                 completion(response)
             }
         }
+    }
+}
+
+final class APIServiceProxy: APIServiceProtocol {
+
+    let apiService: APIServiceProtocol
+
+    init(apiService: APIServiceProtocol) {
+        self.apiService = apiService
+    }
+
+    func getPhotos(userId: Int, completion: @escaping (Result<[Photo], NetworkError>) -> Void) {
+        apiService.getPhotos(userId: userId, completion: completion)
+        print("LOG: called func getPhotos for userID \(userId)")
+    }
+
+    func getGroups(completion: @escaping (Result<[Group], NetworkError>) -> Void) {
+        apiService.getGroups(completion: completion)
+        print("LOG: called func getGroups")
+    }
+
+    func searchGroups(text: String, completion: @escaping ([Group]) -> Void) {
+        apiService.searchGroups(text: text, completion: completion)
+        print("LOG: called func searchGroups with text: \(text)")
+    }
+
+    func joinGroup(id: Int, completion: @escaping (Int) -> Void) {
+        apiService.joinGroup(id: id, completion: completion)
+        print("LOG: called func joinGroup with id \(id)")
+    }
+
+    func leaveGroup(id: Int, completion: @escaping (Int) -> Void) {
+        apiService.leaveGroup(id: id, completion: completion)
+        print("LOG: called func leaveGroup with id \(id)")
     }
 }
 
